@@ -1,21 +1,22 @@
 "use client";
 
-import Lottie from "lottie-react";
-import lottieJson from "../../../../public/BouncingBall.json";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-import GoogleLoginCTA from "@/app/components/utils/GoogleLoginCTA";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
+const GoogleLoginCTA = dynamic(() => import("@/app/components/utils/GoogleLoginCTA"), { ssr: false });
+
 const Login = () => {
   const [isClient, setIsClient] = useState(false);
-  const { data: session, status } = useSession();  // 세션 정보와 상태 가져오기
+  const { data: session, status } = useSession(); // 세션 정보와 상태 가져오기
   const router = useRouter();
 
   useEffect(() => {
-    setIsClient(typeof window !== "undefined");
+    setIsClient(true);
   }, []);
 
   // 사용자가 로그인된 상태면 /home으로 리디렉션
@@ -41,7 +42,7 @@ const Login = () => {
           <div className="flex flex-col relative justify-start items-start">
             {isClient && (
               <div className="h-[70px] w-[70px] z-10 ml-[-20px]">
-                <Lottie loop={true} animationData={lottieJson} />
+                <Lottie loop={true} animationData={require("../../../../public/BouncingBall.json")} />
               </div>
             )}
             <section className="overflow-hidden">
