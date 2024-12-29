@@ -31,8 +31,8 @@ const Login = () => {
   }
 
   return (
-    <main className="w-full h-screen bg-bgGray flex flex-row">
-      <section className="text-mainWhite w-full">
+    <div className="w-full h-screen bg-bgGray flex flex-row">
+      <div className="text-mainWhite w-full">
         <div className="fixed py-8 px-8">
           <Link href="/home">
             <Image src="/icon.svg" alt="logo" width={100} height={100} />
@@ -66,14 +66,14 @@ const Login = () => {
             </section>
           </div>
         </div>
-      </section>
-      <section className="flex flex-col justify-center items-center px-[112px] bg-bgDeepGray">
+      </div>
+      <div className="flex flex-col justify-center items-center px-[112px] bg-bgDeepGray">
         <div className="text-mainWhite font-Pretendard font-normal text-[24px] px-4 py-4">
           <p>자기주도학습 시작하기</p>
         </div>
         <GoogleLoginCTA />
-      </section>
-    </main>
+      </div>
+    </div>
   );
 };
 

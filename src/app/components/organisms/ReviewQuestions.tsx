@@ -1,5 +1,5 @@
 // src/components/ReviewQuestions.tsx
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Button from "@/app/components/atoms/Button";
 import Icon from "@/app/components/atoms/Icon";
 import CheckCircle from "@/app/components/atoms/CheckCircle";
@@ -30,7 +30,7 @@ const ReviewQuestions: React.FC<ReviewQuestionsProps> = ({ noteId }) => {
   const [editMode, setEditMode] = useState<Record<number, boolean>>({});
   const [editedQuestions, setEditedQuestions] = useState<Record<number, { content: string; result: string }>>({});
   
-  const loadPractice = async () => {
+  const loadPractice = useCallback(async () => {
     if (questions && questions.length > 0) {
       setFilteredQuestions(questions);
       setIsEditable(true);
@@ -46,11 +46,11 @@ const ReviewQuestions: React.FC<ReviewQuestionsProps> = ({ noteId }) => {
         setLoading(false);
       }
     }
-  };
+  }, [questions, noteId]); // Add dependencies for useCallback
 
   useEffect(() => {
     loadPractice();
-  }, [noteId]);
+  }, [loadPractice]);
 
   const toggleSelect = (practiceNumber: number) => {
     setSelectedQuestions((prev) =>

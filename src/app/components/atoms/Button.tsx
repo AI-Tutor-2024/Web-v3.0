@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 // 통합된 Button Prop 타입 정의
 interface ButtonProps {
@@ -54,7 +55,13 @@ const Button: React.FC<ButtonProps> = ({
     >
       <p className="font-Pretendard rounded-full font-normal text-center text-lg">{label}</p>
       {/* 이미지 소스가 존재하면 렌더링 */}
-      {imgSrc && <img src={`/${imgSrc}.svg`} alt="icon" className="ml-2 h-[16px] w-[16px]"/>}
+      {imgSrc && <Image 
+        src={`/${imgSrc}.svg`} 
+        alt="icon" 
+        width={16}
+        height={16}
+        className="ml-2"
+      />}
     </button>
   );
 };

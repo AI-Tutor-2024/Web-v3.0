@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 // `CheckCircle` 컴포넌트 props 타입 정의
 interface CheckCircleProps {
@@ -15,11 +16,12 @@ const CheckCircle: React.FC<CheckCircleProps> = ({ isChecked, onChange, size = 3
 
   return (
     <button onClick={handleClick} className="flex items-center justify-center">
-      <img
+      <Image
         src={`/${isChecked ? 'CheckedCircle' : 'UnCheckedCircle'}.svg`}
         alt={isChecked ? 'Checked Circle' : 'UnChecked Circle'}
-        className="h-auto w-auto"
-        style={{ height: size, width: size }} 
+        width={size}
+        height={size}
+        style={{ objectFit: 'contain' }}
       />
     </button>
   );
