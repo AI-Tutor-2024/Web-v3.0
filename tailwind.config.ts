@@ -22,11 +22,11 @@ const config: Config = {
         Pretendard: ["Pretendard"],
       },
       fontSize: {
-        "bold-20": ["20px", "20px"], // Bold 20/20
-        "bold-16": ["16px", "16px"], // Bold 16/16
-        "semibold-16": ["16px", "24px"], // SemiBold 16/24
-        "regular-16": ["16px", "16px"], // Regular 16/16
-        "regular-12": ["12px", "12px"], // Regular 12/12
+        "bold-20": ["20px", "20px"],
+        "bold-16": ["16px", "16px"],
+        "semibold-16": ["16px", "24px"],
+        "regular-16": ["16px", "16px"],
+        "regular-12": ["12px", "12px"],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
