@@ -1,6 +1,6 @@
 import axios from "axios";
 import { baseURL } from "@/app/api/index"; // baseURL로 서버 주소를 관리하도록 import
-
+import apiClient from "@/app/utils/api";
 interface CreatePracticeReq {
   practiceSize: number;
   type: string; // 문제의 유형 (예: "OX")
@@ -32,8 +32,8 @@ export const postSummary = async ({ file, request }: PostSummaryProps) => {
 
   try {
     // 서버로 POST 요청 보내기
-    const response = await axios.post(
-      `${baseURL}/api/v1/professor/practice`, // 동적으로 `noteId` 사용
+    const response = await apiClient.post(
+      `/api/v1/professor/practice`, // 동적으로 `noteId` 사용
       formData,
       {
         headers: {

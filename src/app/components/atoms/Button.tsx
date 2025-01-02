@@ -1,4 +1,5 @@
-import React from 'react';
+import React from "react";
+import Image from "next/image";
 
 // 통합된 Button Prop 타입 정의
 interface ButtonProps {
@@ -14,7 +15,7 @@ interface ButtonProps {
 }
 
 // 통합된 Button 컴포넌트
-const Button: React.FC<ButtonProps> = ({ 
+const Button: React.FC<ButtonProps> = ({
   label = "",
   disabled = false,
   imgSrc,
@@ -25,12 +26,11 @@ const Button: React.FC<ButtonProps> = ({
   type = "button",
   variant = "create",
 }) => {
-  
   // variant에 따른 스타일 적용
   const getButtonStyles = () => {
     switch (variant) {
       case "select":
-        return `rounded-full ${isSelected ? 'bg-mainGreen' : 'bg-[#3F3F3F]'}`;
+        return `rounded-full ${isSelected ? "bg-mainGreen" : "bg-[#3F3F3F]"}`;
       case "next":
       case "create":
         return `bg-[#3F3F3F] rounded-full border border-[#565656] hover:bg-[#222222]`;
@@ -52,9 +52,19 @@ const Button: React.FC<ButtonProps> = ({
       onMouseLeave={onMouseLeave}
       disabled={disabled}
     >
-      <p className="font-Pretendard rounded-full font-normal text-center text-lg">{label}</p>
+      <p className="font-Pretendard rounded-full font-normal text-center text-lg">
+        {label}
+      </p>
       {/* 이미지 소스가 존재하면 렌더링 */}
-      {imgSrc && <img src={`/${imgSrc}.svg`} alt="icon" className="ml-2 h-[16px] w-[16px]"/>}
+      {imgSrc && (
+        <Image
+          src={`/${imgSrc}.svg`}
+          alt="icon"
+          width={16}
+          height={16}
+          className="ml-2"
+        />
+      )}
     </button>
   );
 };

@@ -2,6 +2,7 @@
 
   import axios from "axios";
   import { baseURL } from "..";
+import apiClient from "@/app/utils/api";
 
   interface FetchPracticeResponse {
     information: {
@@ -18,7 +19,7 @@
   // 생성된 문제 목록을 가져오는 API
   export const fetchPractice = async (noteId: number): Promise<FetchPracticeResponse> => {
     try {
-      const response = await axios.get(`${baseURL}/api/v1/professor/practice/${noteId}`);
+      const response = await apiClient.get(`/api/v1/professor/practice/${noteId}`);
       console.log("fetchPractice response:", response);
       return response.data;
     } catch (error) {

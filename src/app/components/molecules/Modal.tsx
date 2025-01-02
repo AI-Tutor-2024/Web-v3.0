@@ -24,7 +24,7 @@ export const SectionFolder: React.FC<{
           onClick(section); // 추가 로직이 필요하다면 실행
         }}
       >
-        <Image
+        <img
           src="/folder.svg"
           alt="folder"
           width={240}

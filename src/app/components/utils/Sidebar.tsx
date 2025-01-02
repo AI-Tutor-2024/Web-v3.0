@@ -19,18 +19,21 @@ const Sidebar: React.FC = () => {
   const toggleSections = () => setShowSections(!showSections);
 
   return (
-    <div className="min-w-[220px] h-screen justify-between flex flex-col z-20 bg-mainBlack px-2">
-      <div className="flex flex-col h-full rounded-lg bg-mainBlack">
+    <div className="min-w-[220px] h-screen justify-between flex flex-col z-20 bg-black px-2">
+      <div className="flex flex-col h-full rounded-lg bg-black">
         <Link href="/home">
           <div className="flex items-center justify-center px-2">
             <Icon label="icon" className="w-[110px] h-[70px] m-auto" />
           </div>
         </Link>
         <div>
-          <div className="hover:bg-[#3c3c3c] hover:rounded-lg cursor-pointer transition-colors duration-200 rounded-lg">
+          <div className="hover:bg-black-70 hover:rounded-lg cursor-pointer transition-colors duration-200 rounded-lg">
             <Link href="/home">
               <div className="px-8 py-2 flex flex-row text-center gap-3">
-                <Icon label="ic_side_home" className="w-[20px] h-[20px] my-auto" />
+                <Icon
+                  label="ic_side_home"
+                  className="w-[20px] h-[20px] my-auto"
+                />
                 <p className="text-white">홈</p>
               </div>
             </Link>
@@ -67,7 +70,7 @@ const Sidebar: React.FC = () => {
         </div>
       </div>
       <div className="pb-8">
-        <div className="hover:bg-[#3c3c3c] hover:rounded-md cursor-pointer transition-colors duration-200">
+        <div className="hover:bg-black-80 hover:rounded-md cursor-pointer transition-colors duration-200 rounded-md">
           <div className="flex flex-row px-[35px] py-2 gap-3">
             <Icon label="guide" className="w-[20px] h-[20px] my-auto" />
             <p className="text-white">가이드보기</p>

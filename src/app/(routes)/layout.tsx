@@ -1,31 +1,26 @@
-// app/(routes)/layout.tsx
+"use client";
 
 import Sidebar from "@/app/components/utils/Sidebar";
 import { PracticeProvider } from "@/app/context/PracticeContext";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { usePathname } from "next/navigation";
 import "@/app/globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const pathname = usePathname();
+  const isLoginPage = pathname.startsWith("/login");
 
-export const metadata: Metadata = {
-  title: "AI Tutor",
-  description: "교수자를 위해 복습 문제 및 요약문을 생성해줍니다.",
-};
-
-export default function RoutesLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>
-        <div className="flex">
-          <Sidebar />
-          <div className="flex-1 bg-bgDeepGray">
-            <PracticeProvider>
-              {children}
-            </PracticeProvider>
-          </div>
+    <div>
+      <PracticeProvider>
+        <div className="flex bg-black">
+          {!isLoginPage && <Sidebar />}
+          <div className="flex-1 bg-black-90">{children}</div>
         </div>
-      </body>
-    </html>
+      </PracticeProvider>
+    </div>
   );
 }

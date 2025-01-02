@@ -7,12 +7,13 @@ const Home = () => {
   const router = useRouter();
 
   const handleProfessorClick = () => {
-    router.push('/home');
+    router.push('/login');
   };
   
   return (
     <div className="flex flex-row bg-bgDeepGray">
       <div className="w-full h-lvh flex flex-col justify-center items-center">
+        <div className="px-8 py-8 font-Pretendard font-semibold leading-[70px] text-[57px] text-customGreen">
         <div className="px-8 py-8 font-Pretendard font-semibold leading-[70px] text-[57px] text-customGreen">
           회원님의 신분을 선택해주세요
         </div>
@@ -26,9 +27,10 @@ const Home = () => {
               <p className="font-Pretendard font-normal text-2xl">학생</p>
             </button>
         </div>
-        <p className="font-Pretendard font-normal text-center text-gray-500 mt-2">학생 서비스는 현재 준비중입니다 :)<br/>빠른 시일 내로 준비하도록 하겠습니다.</p>
+        <p className="font-Pretendard font-normal text-base text-center text-gray-500 mt-2">학생 서비스는 현재 준비중입니다 :)<br/>빠른 시일 내로 준비하도록 하겠습니다.</p>
       </div>
     </div>
+  </div>
   );
 };
 
