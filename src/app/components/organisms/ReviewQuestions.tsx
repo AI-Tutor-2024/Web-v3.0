@@ -160,23 +160,22 @@ const ReviewQuestions: React.FC<ReviewQuestionsProps> = ({ noteId }) => {
       <table className="px-5 py-2 table-fixed w-full text-left text-white border-separate border-spacing-0.2">
         <thead>
           <tr className="bg-black-80 text-center whitespace-nowrap m-2">
-            <th className="w-[7%] p-1 ">
-              <Icon
-                label="UnCheckedCircle"
-                className="items-center w-full px-2.5 align-middle"
-              />
+            <th className="w-[7%] p-1">
+              <div className="flex justify-center items-center">
+                <Icon label="UnCheckedCircle" className="w-8 h-8" />
+              </div>
             </th>
             <th className="w-[20%] p-1">문제유형</th>
             <th className="w-[50%] p-1">문제</th>
             <th className="w-[20%] p-1">답</th>
             <th className="w-[7%] p-1">
-              <Icon
-                label="update"
-                className="items-center w-full px-3.5 align-middle"
-              />
+              <div className="flex justify-center items-center">
+                <Icon label="update" className="w-5 h-5" />
+              </div>
             </th>
           </tr>
         </thead>
+
         <tbody>
           {filteredQuestions.map((question) => (
             <tr
