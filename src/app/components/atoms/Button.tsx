@@ -60,8 +60,8 @@ const Button: React.FC<ButtonProps> = ({
         <Image
           src={`/${imgSrc}.svg`}
           alt="icon"
-          width={16}
-          height={16}
+          width={10}
+          height={10}
           className="ml-2"
         />
       )}
