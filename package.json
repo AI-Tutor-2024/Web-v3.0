@@ -19,6 +19,7 @@
     "next-auth": "^4.24.10",
     "pdfjs-dist": "^4.9.155",
     "react": "^18",
+    "react-cookie": "^7.2.2",
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
     "zustand": "^5.0.0-rc.2"
