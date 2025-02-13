@@ -14,12 +14,19 @@ interface NewNoteFormProps {
   setRequirement: (requirement: string) => void;
 }
 
-const NewNoteForm: React.FC<NewNoteFormProps> = ({ folderId, noteId, setNoteName }) => {
+const NewNoteForm: React.FC<NewNoteFormProps> = ({
+  folderId,
+  noteId,
+  setNoteName,
+}) => {
   const { setFile, setKeywords, setRequirement } = usePracticeContext(); // Context에서 함수 가져옴
 
   const [keywords, setLocalKeywords] = useState(""); // 로컬 키워드
   const [requirement, setLocalRequirement] = useState(""); // 로컬 요구사항
-  const [folderInfo, setFolderInfo] = useState<{ folderName: string; professor: string }>({
+  const [folderInfo, setFolderInfo] = useState<{
+    folderName: string;
+    professor: string;
+  }>({
     folderName: "",
     professor: "",
   });
@@ -32,7 +39,9 @@ const NewNoteForm: React.FC<NewNoteFormProps> = ({ folderId, noteId, setNoteName
         const folders = await getFolders();
 
         // 현재 folderId에 해당하는 폴더 찾기
-        const currentFolder = folders.find((folder) => folder.folderId === folderId);
+        const currentFolder = folders.find(
+          (folder) => folder.folderId === folderId
+        );
         if (currentFolder) {
           setFolderInfo({
             folderName: currentFolder.folderName,
@@ -56,8 +65,8 @@ const NewNoteForm: React.FC<NewNoteFormProps> = ({ folderId, noteId, setNoteName
   }, [keywords, requirement, setKeywords, setRequirement]);
 
   return (
-    <div className="flex flex-col justify-between h-full space-y-4">
-      <div className="flex flex-col space-y-5 px-8 pt-4">
+    <div className="flex flex-col w-full justify-between h-full space-y-4">
+      <div className="flex flex-col justify-start w-full space-y-5 px-8 pt-4">
         {/* 폴더명 */}
         <FormInput
           name="folderName"

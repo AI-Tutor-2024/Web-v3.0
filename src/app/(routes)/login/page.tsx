@@ -33,6 +33,8 @@ const Login = () => {
     return null; // 리디렉션이 일어나기 전까지 이 컴포넌트를 숨깁니다.
   }
 
+  console.log("status", status, "session", session);
+
   return (
     <div className="w-full h-screen bg-black-90 flex flex-col md:flex-row">
       <div className="text-white w-full">

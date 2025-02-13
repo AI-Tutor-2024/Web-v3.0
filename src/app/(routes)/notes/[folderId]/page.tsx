@@ -15,10 +15,18 @@ import { usePracticeContext } from "@/app/context/PracticeContext";
 const NotesPage = () => {
   const router = useRouter();
   const { folderId } = useParams();
-  
+
   // Unconditionally retrieve context values
-  const { setFile, setKeywords, setRequirement, setFolderName, setProfessor, folderName, professor } = usePracticeContext();
-  
+  const {
+    setFile,
+    setKeywords,
+    setRequirement,
+    setFolderName,
+    setProfessor,
+    folderName,
+    professor,
+  } = usePracticeContext();
+
   const [notes, setNotes] = useState<NoteData[]>([]);
   const [loading, setLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -29,14 +37,16 @@ const NotesPage = () => {
       const loadNotes = async () => {
         try {
           const folders = await getFolders();
-          const currentFolder = folders.find(folder => folder.folderId === Number(folderId));
+          const currentFolder = folders.find(
+            (folder) => folder.folderId === Number(folderId)
+          );
           if (currentFolder) {
             setFolderName(currentFolder.folderName);
             setProfessor(currentFolder.professor);
           } else {
             console.error("Folder not found");
           }
-          
+
           const notesData: NoteResponse = await fetchNotes(Number(folderId));
           setNotes(notesData.noteListDetailRes);
         } catch (error) {
@@ -48,7 +58,7 @@ const NotesPage = () => {
 
       loadNotes();
     }
-  }, [folderId, setFolderName, setProfessor]);  // Include missing dependencies
+  }, [folderId, setFolderName, setProfessor]); // Include missing dependencies
 
   const handleDeleteNote = async (noteId: number) => {
     try {
@@ -67,11 +77,14 @@ const NotesPage = () => {
         return;
       }
 
-      const createdNoteResponse = await createNote(Number(folderId), { title: noteName });
+      const createdNoteResponse = await createNote(Number(folderId), {
+        title: noteName,
+      });
 
       if (createdNoteResponse) {
         const notesData: NoteResponse = await fetchNotes(Number(folderId));
-        const newNote = notesData.noteListDetailRes[notesData.noteListDetailRes.length - 1];
+        const newNote =
+          notesData.noteListDetailRes[notesData.noteListDetailRes.length - 1];
         router.push(`/notes/${folderId}/${newNote.noteId}/create-practice`);
       }
     } catch (error) {
@@ -107,14 +120,20 @@ const NotesPage = () => {
     <div className="h-full flex flex-col justify-between">
       {isFormOpen ? (
         <div className="flex flex-col justify-start p-8">
-          <p className="text-white text-sm font-normal">수업 정보를 입력해 주세요</p>
+          <p className="text-white text-sm font-normal">
+            수업 정보를 입력해 주세요
+          </p>
           <p className="text-white text-2xl font-normal">새로운 수업</p>
         </div>
       ) : (
         <div className="flex flex-row justify-between">
           <Info folderName={folderName} professorName={professor} />
           <div className="flex flex-col justify-center items-center pr-8">
-            <Button label="새 노트 만들기" variant="create" onClick={() => setIsFormOpen(true)} />
+            <Button
+              label="새 노트 만들기"
+              variant="create"
+              onClick={() => setIsFormOpen(true)}
+            />
           </div>
         </div>
       )}
@@ -137,18 +156,31 @@ const NotesPage = () => {
             <p className="text-base text-gray-400 mb-8">
               강의 녹화 파일을 업로드하면 복습 문제 생성이 가능해요
             </p>
-            <Button label="새 노트 만들기" variant="create" onClick={() => setIsFormOpen(true)} />
+            <Button
+              label="새 노트 만들기"
+              variant="create"
+              onClick={() => setIsFormOpen(true)}
+            />
           </div>
         ) : (
           <div>
-            <NoteList notes={notes} onDeleteNote={handleDeleteNote} folderId={Number(folderId)} />
+            <NoteList
+              notes={notes}
+              onDeleteNote={handleDeleteNote}
+              folderId={Number(folderId)}
+            />
           </div>
         )}
       </div>
 
       {isFormOpen && (
         <div className="flex justify-end p-8">
-          <Button label="다음" variant="next" imgSrc="arrow_next" onClick={handleCreateNote} />
+          <Button
+            label="다음"
+            variant="next"
+            imgSrc="arrow_next"
+            onClick={handleCreateNote}
+          />
         </div>
       )}
     </div>

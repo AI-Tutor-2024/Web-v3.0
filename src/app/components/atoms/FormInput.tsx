@@ -30,11 +30,9 @@ export const FormInput: React.FC<FormInputProps> = ({
       : "bg-black-80 text-white rounded-md outline-none px-4 py-2";
 
   return (
-    <div className="flex flex-row w-full justify-center">
+    <div className="flex flex-row w-full ">
       {label && (
-        <label
-          className={`text-mainWhite text-base text-start ${labelClassName}`}
-        >
+        <label className={`text-white text-base text-start ${labelClassName}`}>
           {label}
         </label>
       )}

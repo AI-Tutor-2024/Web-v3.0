@@ -13,11 +13,17 @@ const NewPracticeForm: React.FC = () => {
   const oxRef = useRef<HTMLDivElement>(null); // OX 버튼에 대한 ref
   const shortRef = useRef<HTMLDivElement>(null); // 단답형 버튼에 대한 ref
 
-  const [oxPopoverPosition, setOXPopoverPosition] = useState<{ top: string; left: string }>({
+  const [oxPopoverPosition, setOXPopoverPosition] = useState<{
+    top: string;
+    left: string;
+  }>({
     top: "0px",
     left: "0px",
   });
-  const [shortPopoverPosition, setShortPopoverPosition] = useState<{ top: string; left: string }>({
+  const [shortPopoverPosition, setShortPopoverPosition] = useState<{
+    top: string;
+    left: string;
+  }>({
     top: "0px",
     left: "0px",
   });
@@ -26,11 +32,17 @@ const NewPracticeForm: React.FC = () => {
   useEffect(() => {
     if (oxRef.current) {
       const rect = oxRef.current.getBoundingClientRect();
-      setOXPopoverPosition({ top: `${rect.bottom + window.scrollY + 15}px`, left: `${rect.left + window.scrollX}` });
+      setOXPopoverPosition({
+        top: `${rect.bottom + window.scrollY + 15}px`,
+        left: `${rect.left + window.scrollX}`,
+      });
     }
     if (shortRef.current) {
       const rect = shortRef.current.getBoundingClientRect();
-      setShortPopoverPosition({ top: `${rect.bottom + window.scrollY + 15}px`, left: `${rect.left + window.scrollX}` });
+      setShortPopoverPosition({
+        top: `${rect.bottom + window.scrollY + 15}px`,
+        left: `${rect.left + window.scrollX}`,
+      });
     }
   }, [oxRef, shortRef]);
 
@@ -70,7 +82,9 @@ const NewPracticeForm: React.FC = () => {
     <div className="flex flex-col justify-start h-full">
       {/* 문제 개수 선택 */}
       <div className="flex flex-row gap-4 mb-8">
-        <span className="text-white flex flex-col justify-start items-start mt-2">문제 개수</span>
+        <span className="text-white flex flex-col justify-start items-start mt-2">
+          문제 개수
+        </span>
         <div className="flex flex-col items-start gap-4">
           {/* AI 추천 버튼 */}
           <div className="flex flex-row items-center gap-4">
@@ -83,7 +97,7 @@ const NewPracticeForm: React.FC = () => {
                 setPracticeSize(0); // AI 추천 선택 시 practiceSize를 0으로 설정
               }}
             />
-            <p>복습에 필요한 진짜 문제를 제공해드려요</p>
+            <p className="text-white">복습에 필요한 진짜 문제를 제공해드려요</p>
           </div>
 
           {/* 직접 입력 버튼 */}
@@ -98,7 +112,9 @@ const NewPracticeForm: React.FC = () => {
             {countOption === "manual" && (
               <CountInput
                 name="count"
-                defaultValue={practiceSize !== null ? practiceSize.toString() : ""}
+                defaultValue={
+                  practiceSize !== null ? practiceSize.toString() : ""
+                }
                 onChange={handleCountChange}
                 placeholder="0"
               />
