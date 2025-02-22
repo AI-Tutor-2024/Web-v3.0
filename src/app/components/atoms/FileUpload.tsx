@@ -45,7 +45,9 @@ const FileUpload: React.FC<FileUploadProps> = ({
   return (
     <div className="mb-4">
       <div className="flex flex-row">
-        <div className={`text-mainWhite text-base flex-shrink-0 ${labelClassName}`}>{label}</div>
+        <div className={`text-white text-base flex-shrink-0 ${labelClassName}`}>
+          {label}
+        </div>
         <div
           {...getRootProps()}
           className="flex flex-col justify-start w-[730px] h-32 rounded-md p-5 cursor-pointer bg-[#252424] text-gray-400 hover:text-gray-500 hover:bg-bgDeepGray"
@@ -60,7 +62,8 @@ const FileUpload: React.FC<FileUploadProps> = ({
                   </span>
                 </p>
                 <p className="text-xs text-gray-500">
-                  {description} (파일 길이: 최대 120분, 지원 형식: m4a, mp3, wav, mp4)
+                  {description} (파일 길이: 최대 120분, 지원 형식: m4a, mp3,
+                  wav, mp4)
                 </p>
               </div>
               <div className="mt-3 flex flex-col justify-end items-end">
