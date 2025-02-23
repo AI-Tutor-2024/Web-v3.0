@@ -34,10 +34,10 @@ export const SectionFolder: React.FC<{
       </div>
       <div className="flex justify-between w-full px-3 mt-[-60px]">
         <div className="flex flex-col">
-          <p className="font-Pretendard text-[20px] text-mainBlack">
+          <p className="font-Pretendard text-[20px] text-black">
             {section.folderName}
           </p>
-          <p className="font-Pretendard text-[14px] text-mainBlack/[0.4]">
+          <p className="font-Pretendard text-[14px] text-black/[0.4]">
             {section.professor}
           </p>
         </div>
