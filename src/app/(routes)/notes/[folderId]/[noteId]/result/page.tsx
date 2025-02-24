@@ -30,17 +30,13 @@ const ResultPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // 문제 목록 API 호출
         const fetchedQuestions = await fetchPractice(Number(noteId));
         if (fetchedQuestions.information.length > 0) {
-          // API에서 데이터를 받은 경우, Context에 설정
           setQuestions(fetchedQuestions.information);
         }
 
-        // 요약문 API 호출
         const response = await axios.get(`/api/summary/${noteId}`);
         if (response.data.summary) {
-          // API에서 요약문을 받은 경우, Context에 설정
           setSummary(response.data.summary);
         }
       } catch (error) {
@@ -48,7 +44,6 @@ const ResultPage = () => {
       }
     };
 
-    // API 호출을 먼저 하고, 저장된 데이터가 없는 경우 Context에 있는 데이터를 표시
     fetchData();
   }, [noteId, setQuestions, setSummary]);
 
@@ -59,7 +54,6 @@ const ResultPage = () => {
       </div>
 
       <div className="flex flex-col">
-        {/* 탭 메뉴 */}
         <div className="w-full flex justify-center items-stretch">
           <button
             className={`w-full py-2 border-b-2 font-medium ${
@@ -83,7 +77,6 @@ const ResultPage = () => {
           </button>
         </div>
 
-        {/* 탭에 따른 컴포넌트 렌더링 */}
         {activeTab === "questions" && (
           <ReviewQuestions noteId={Number(noteId)} />
         )}

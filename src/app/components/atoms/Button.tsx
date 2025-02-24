@@ -52,7 +52,7 @@ const Button: React.FC<ButtonProps> = ({
       onMouseLeave={onMouseLeave}
       disabled={disabled}
     >
-      <p className="font-Pretendard rounded-full font-normal text-center text-base">
+      <p className="font-Pretendard rounded-full font-normal text-center text-base whitespace-nowrap">
         {label}
       </p>
       {/* 이미지 소스가 존재하면 렌더링 */}

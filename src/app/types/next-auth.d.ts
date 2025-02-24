@@ -1,8 +1,22 @@
-import NextAuth from "next-auth";
+import NextAuth, { DefaultSession, DefaultUser, DefaultJWT } from "next-auth";
 
-// `Session` 타입을 확장해 `accessToken` 속성을 추가
 declare module "next-auth" {
   interface Session {
-    accessToken?: string;
+    user: {
+      aiTutorToken?: string | null;
+      refreshToken?: string | null;
+    } & DefaultSession["user"];
+  }
+
+  interface User extends DefaultUser {
+    aiTutorToken?: string | null;
+    refreshToken?: string | null;
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT extends DefaultJWT {
+    aiTutorToken?: string | null;
+    refreshToken?: string | null;
   }
 }

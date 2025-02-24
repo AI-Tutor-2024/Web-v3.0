@@ -53,8 +53,13 @@ const handler = NextAuth({
           }
         }
       }
+      return token;
+    },
 
-      return { ...token, aiTutorToken: null, refreshToken: null };
+    async session({ session, token }) {
+      session.user.aiTutorToken = token.aiTutorToken;
+      session.user.refreshToken = token.refreshToken;
+      return session;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
