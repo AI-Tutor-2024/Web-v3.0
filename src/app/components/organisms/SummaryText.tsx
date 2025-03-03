@@ -70,7 +70,7 @@ const SummaryText: React.FC<SummaryTextProps> = ({ noteId }) => {
       {summary ? (
         <div>
           <p className="p-8">{summary}</p>
-          <div className="z-40 w-full flex justify-end p-10 bottom-0">
+          <div className="z-40 fixed right-0 p-10 bottom-0">
             <PDFDownloadLink
               document={<PDFDocument summary={summary} />}
               fileName={`summary_${noteId}.pdf`}

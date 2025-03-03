@@ -3,32 +3,32 @@ import Image from "next/image";
 
 // 통합된 Button Prop 타입 정의
 interface ButtonProps {
-  label?: string; // 버튼의 텍스트
-  disabled?: boolean; // 버튼 비활성화 여부
-  imgSrc?: string; // 이미지 소스 (옵션)
-  isSelected?: boolean; // 선택된 상태 여부 (옵션)
-  onClick?: () => void; // 클릭 핸들러 (옵션)
-  onMouseEnter?: () => void; // 마우스 엔터 핸들러 (옵션)
-  onMouseLeave?: () => void; // 마우스 리브 핸들러 (옵션)
+  label?: string; 
+  disabled?: boolean; 
+  imgSrc?: string; 
+  imgAlt?: string; 
+  isSelected?: boolean;
+  onClick?: () => void; 
+  onMouseEnter?: () => void; 
+  onMouseLeave?: () => void;
   type?: "button" | "submit" | "reset"; // 버튼 타입
-  variant?: "select" | "next" | "create" | "cancel" | "save"; // 버튼 스타일 종류
-  iconPosition?: "left" | "right"; // 아이콘 위치 설정 (기본값: right)
+  variant?: "select" | "next" | "create" | "cancel" | "save"; 
+  iconPosition?: "left" | "right";
 }
 
-// 통합된 Button 컴포넌트
 const Button: React.FC<ButtonProps> = ({
   label = "",
   disabled = false,
   imgSrc,
+  imgAlt = "icon",
   isSelected = false,
   onClick,
   onMouseEnter,
   onMouseLeave,
   type = "button",
   variant = "create",
-  iconPosition = "right", // 기본적으로 아이콘을 오른쪽에 배치
+  iconPosition = "right",
 }) => {
-  // variant에 따른 스타일 적용
   const getButtonStyles = () => {
     switch (variant) {
       case "select":
@@ -48,24 +48,18 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       type={type}
-      className={`flex items-center justify-center py-1.5 px-4 text-white ${getButtonStyles()}`}
+      className={`flex items-center justify-center gap-2 py-1.5 px-4 text-white ${getButtonStyles()}`}
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       disabled={disabled}
     >
-      {/* 아이콘이 앞에 오는 경우 */}
       {imgSrc && iconPosition === "left" && (
-        <Image src={`/${imgSrc}.svg`} alt="icon" width={16} height={16} className="mr-2" />
+        <Image src={`/${imgSrc}.svg`} alt={imgAlt} width={16} height={16} />
       )}
-
-      <p className="font-Pretendard rounded-full font-normal text-center text-base">
-        {label}
-      </p>
-
-      {/* 아이콘이 뒤에 오는 경우 */}
+      <p className="font-Pretendard font-normal text-center text-base">{label}</p>
       {imgSrc && iconPosition === "right" && (
-        <Image src={`/${imgSrc}.svg`} alt="icon" width={16} height={16} className="ml-2" />
+        <Image src={`/${imgSrc}.svg`} alt={imgAlt} width={16} height={16} />
       )}
     </button>
   );

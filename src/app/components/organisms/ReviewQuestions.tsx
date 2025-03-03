@@ -50,7 +50,7 @@ const ReviewQuestions: React.FC<ReviewQuestionsProps> = ({ noteId }) => {
         setLoading(false);
       }
     }
-  }, [questions, noteId]); // Add dependencies for useCallback
+  }, [questions, noteId]);
 
   useEffect(() => {
     loadPractice();
@@ -133,10 +133,9 @@ const ReviewQuestions: React.FC<ReviewQuestionsProps> = ({ noteId }) => {
       await savePracticeQuestions(noteId, dataToSave);
       alert("선택된 문제들이 저장되었습니다.");
 
-      // 저장 성공 후 context의 questions를 초기화
-      setQuestions([]); // context에서 questions 삭제
-      await loadPractice(); // 저장 후 API 호출을 통해 최신 데이터를 다시 로드
-      setIsEditable(false); // 이후에는 수정 불가능하도록 설정
+      setQuestions([]);
+      await loadPractice();
+      setIsEditable(false);
     } catch (error) {
       console.error("문제 저장 중 오류 발생:", error);
       alert("문제 저장에 실패했습니다.");
@@ -160,13 +159,14 @@ const ReviewQuestions: React.FC<ReviewQuestionsProps> = ({ noteId }) => {
       <table className="px-5 py-2 table-fixed w-full text-left text-white border-separate border-spacing-0.2">
         <thead className="max-h-[20px]">
           <tr className="bg-black-80 text-center whitespace-nowrap m-2">
-            <th className="w-[7%] p-1">
-              <div className="flex justify-center items-center">
-                <Icon label="UnCheckedCircle" className="w-8 h-8" />
+            <th className="w-[10%] p-1 px-2">
+              <div className="flex gap-1 justify-center items-center w-full">
+                <Icon label="UnCheckedCircle" className="w-6 h-8" />
+                <span>전체선택</span>
               </div>
             </th>
             <th className="w-[20%] p-1">문제유형</th>
-            <th className="min-w-[50%] p-1">문제</th>
+            <th className="min-w-[40%] p-1">문제</th>
             <th className="w-[20%] p-1">답</th>
             <th className="w-[7%] p-1">
               <div className="flex justify-center items-center">
@@ -182,9 +182,8 @@ const ReviewQuestions: React.FC<ReviewQuestionsProps> = ({ noteId }) => {
               key={question.practiceNumber}
               className="bg-black-90 m-2 text-center border-b-4 border-white border-solid"
             >
-              {/* 선택 */}
-              <td className="p-2 ">
-                <div className="flex justify-center items-center">
+              <td className="p-2 min-w-14">
+                <div className="flex justify-center items-center ">
                   <CheckCircle
                     isChecked={selectedQuestions.includes(
                       question.practiceNumber
@@ -194,7 +193,6 @@ const ReviewQuestions: React.FC<ReviewQuestionsProps> = ({ noteId }) => {
                 </div>
               </td>
 
-              {/* 문제유형 */}
               <td className="p-1 ">
                 <div className="whitespace-nowrap items-center w-full flex flex-col">
                   <Button
@@ -207,7 +205,6 @@ const ReviewQuestions: React.FC<ReviewQuestionsProps> = ({ noteId }) => {
                 </div>
               </td>
 
-              {/* 문제 */}
               <td className="p-2 py-3 text-start ">
                 {editMode[question.practiceNumber] ? (
                   <FormInput
@@ -230,7 +227,6 @@ const ReviewQuestions: React.FC<ReviewQuestionsProps> = ({ noteId }) => {
                 )}
               </td>
 
-              {/* 답 */}
               <td className="p-1">
                 {editMode[question.practiceNumber] ? (
                   <FormInput
@@ -253,7 +249,6 @@ const ReviewQuestions: React.FC<ReviewQuestionsProps> = ({ noteId }) => {
                 )}
               </td>
 
-              {/* 수정 */}
               <td className="p-1">
                 <div className="flex justify-center">
                   <Icon
@@ -269,10 +264,13 @@ const ReviewQuestions: React.FC<ReviewQuestionsProps> = ({ noteId }) => {
         </tbody>
       </table>
 
-      {/* 저장 버튼 */}
       {isEditable && (
-        <div className="z-40 w-full flex justify-end p-10">
-          <Button label="저장" variant="next" onClick={saveSelectedQuestions} />
+        <div className="z-40 fixed bottom-0 p-10 right-0">
+          <Button
+            label="PDF 변환"
+            variant="next"
+            onClick={saveSelectedQuestions}
+          />
         </div>
       )}
     </div>
