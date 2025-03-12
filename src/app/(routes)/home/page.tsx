@@ -30,42 +30,32 @@ const HomePage = () => {
   const [professor, setProfessor] = useState("");
   const [isEditMode, setIsEditMode] = useState(false);
 
-  const handleCreateFolder = async () => {
-    try {
-      await createFolder.mutateAsync({
-        folderName: subject,
-        professorName: professor,
-      });
-      setShowModal(false);
-      setSubject("");
-      setProfessor("");
-    } catch (error) {
-      console.error("폴더 생성 실패:", error);
-    }
+  const handleCreateFolder = () => {
+    createFolder.mutate({
+      folderName: subject,
+      professorName: professor,
+    });
+    setShowModal(false);
+    setSubject("");
+    setProfessor("");
   };
 
-  const handleUpdateFolder = async () => {
+  const handleUpdateFolder = () => {
     if (!selectedFolder) return;
-    try {
-      await updateFolder.mutateAsync({
-        folderId: selectedFolder.folderId,
-        folderName: subject,
-        professorName: professor,
-      });
-      setShowModify((prev) => ({ ...prev, [selectedFolder.folderId]: false }));
-      setShowModal(false);
-    } catch (error) {
-      console.error("폴더 수정 실패:", error);
-    }
+
+    updateFolder.mutate({
+      folderId: selectedFolder.folderId,
+      folderName: subject,
+      professorName: professor,
+    });
+
+    setShowModify((prev) => ({ ...prev, [selectedFolder.folderId]: false }));
+    setShowModal(false);
   };
 
-  const handleDeleteFolder = async (folderId: number) => {
-    try {
-      await deleteFolder.mutateAsync(folderId);
-      setSelectedFolder(null);
-    } catch (error) {
-      console.error("폴더 삭제 실패:", error);
-    }
+  const handleDeleteFolder = (folderId: number) => {
+    deleteFolder.mutate(folderId);
+    setSelectedFolder(null);
   };
 
   return (
