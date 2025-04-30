@@ -1,8 +1,4 @@
-import {
-  FolderListData,
-  PatchFolderProps,
-  PostFolderProps,
-} from "@/app/types/folder";
+import { PatchFolderProps, PostFolderProps } from "@/app/types/folder";
 import { baseURL } from "..";
 
 import apiClient from "@/app/utils/api";
