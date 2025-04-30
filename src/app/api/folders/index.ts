@@ -21,7 +21,7 @@ export const updateFolder = async ({
   professorName,
 }: PatchFolderProps) => {
   const response = await apiClient.patch(
-    `${baseURL}/api/v1/folder/${folderId}`,
+    `${baseURL}/api/v1/folders/${folderId}`,
     {
       folderName,
       professorName,
