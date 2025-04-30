@@ -35,8 +35,14 @@ const NotesPage = () => {
       const loadNotes = async () => {
         try {
           const folders = await getFolders();
+          interface Folder {
+            folderId: number;
+            folderName: string;
+            professor: string;
+          }
+
           const currentFolder = folders.find(
-            (folder) => folder.folderId === Number(folderId)
+            (folder: Folder) => folder.folderId === Number(folderId)
           );
           if (currentFolder) {
             setFolderName(currentFolder.folderName);

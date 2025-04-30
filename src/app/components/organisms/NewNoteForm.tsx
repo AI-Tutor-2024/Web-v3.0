@@ -39,8 +39,14 @@ const NewNoteForm: React.FC<NewNoteFormProps> = ({
       try {
         const folders = await getFolders();
 
+        interface Folder {
+          folderId: number;
+          folderName: string;
+          professor: string;
+        }
+
         const currentFolder = folders.find(
-          (folder) => folder.folderId === folderId
+          (folder: Folder) => folder.folderId === folderId
         );
         if (currentFolder) {
           setFolderInfo({
