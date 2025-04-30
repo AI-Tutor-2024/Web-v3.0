@@ -37,10 +37,11 @@ export const fetchFolderInfo = async (
 };
 
 export const deleteNote = async (
+  folderId: number,
   noteId: number
 ): Promise<DeleteNoteResponse> => {
   const response = await apiClient.delete(
-    `${baseURL}/api/v1/professor/note/${noteId}`
+    `${baseURL}/api/v1/folders/${folderId}/notes/${noteId}`
   );
   return response.data;
 };

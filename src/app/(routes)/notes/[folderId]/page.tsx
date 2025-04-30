@@ -60,7 +60,7 @@ const NotesPage = () => {
 
   const handleDeleteNote = async (noteId: number) => {
     try {
-      await deleteNote(noteId);
+      await deleteNote(Number(folderId), noteId);
       const notesData: NoteResponse = await fetchNotes(Number(folderId));
       setNotes(notesData.noteListDetailRes);
     } catch (error) {
