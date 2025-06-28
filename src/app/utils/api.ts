@@ -1,20 +1,19 @@
-import axios, { AxiosInstance } from "axios";
-import { baseURL } from "@/app/api/index";
-import { refreshAuthToken } from "@/app/api/auth/[...nextauth]/auth";
+import axios, { AxiosInstance } from 'axios';
+import { baseURL } from '@/app/api/index';
+import { refreshAuthToken } from '@/app/api/auth/[...nextauth]/auth';
 
 const apiClient = axios.create({
   baseURL: baseURL,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 
 export const setAuthToken = (token: string | null) => {
-  console.log("Setting auth token:", token ? "Token exists" : "No token");
   if (token) {
-    apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   } else {
-    delete apiClient.defaults.headers.common["Authorization"];
+    delete apiClient.defaults.headers.common['Authorization'];
   }
 };
 
@@ -36,15 +35,15 @@ apiClient.interceptors.response.use(
       originalRequest._retry = true;
 
       const refreshToken =
-        typeof window !== "undefined"
-          ? localStorage.getItem("refreshToken")
+        typeof window !== 'undefined'
+          ? localStorage.getItem('refreshToken')
           : null;
       if (refreshToken) {
         const tokens = await refreshAuthToken(refreshToken);
         if (tokens?.accessToken) {
           setAuthToken(tokens.accessToken);
           originalRequest.headers[
-            "Authorization"
+            'Authorization'
           ] = `Bearer ${tokens.accessToken}`;
           return apiClient(originalRequest);
         }

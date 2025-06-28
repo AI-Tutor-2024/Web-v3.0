@@ -18,7 +18,7 @@ export default async function savePracticeQuestions(
         },
       }
     );
-    console.log('response:', response);
+
     return response.data;
   } catch (error) {
     console.error('Error saving practice questions:', error);

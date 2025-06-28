@@ -46,8 +46,6 @@ const NotesPage = () => {
           if (currentFolder) {
             setFolderName(currentFolder.folderName);
             setProfessor(currentFolder.professor);
-          } else {
-            console.error('Folder not found');
           }
 
           const notesData: NoteResponse = await fetchNotes(Number(folderId));

@@ -35,7 +35,6 @@ export const postSummary = async ({ file, request }: PostSummaryProps) => {
       }
     );
 
-    console.log('Response:', response.data);
     return response.data;
   } catch (error) {
     console.error('Upload error:', error);
