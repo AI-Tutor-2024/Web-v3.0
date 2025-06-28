@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { FormInput } from "@/app/components/atoms/FormInput";
-import FileUpload from "@/app/components/atoms/FileUpload";
-import TabComponent from "@/app/components/atoms/TextInputSection";
-import { usePracticeContext } from "@/app/context/PracticeContext";
-import { getFolders } from "@/app/api/folders";
-import { useSession } from "next-auth/react";
+import React, { useEffect, useState } from 'react';
+import { FormInput } from '@/app/components/atoms/FormInput';
+import FileUpload from '@/app/components/atoms/FileUpload';
+import { usePracticeContext } from '@/app/context/PracticeContext';
+import { getFolders } from '@/app/api/folders';
 
 interface NewNoteFormProps {
   folderId: number;
@@ -13,23 +11,26 @@ interface NewNoteFormProps {
   setFile: (file: File | null) => void;
   setKeywords: (keywords: string) => void;
   setRequirement: (requirement: string) => void;
+  setIsUploading: (uploading: boolean) => void; // ✅ 추가된 prop
 }
 
 const NewNoteForm: React.FC<NewNoteFormProps> = ({
   folderId,
   noteId,
   setNoteName,
+  setFile,
+  setKeywords,
+  setRequirement,
+  setIsUploading, // ✅ 수신
 }) => {
-  const { setFile, setKeywords, setRequirement } = usePracticeContext();
-
-  const [keywords, setLocalKeywords] = useState("");
-  const [requirement, setLocalRequirement] = useState("");
+  const [keywords, setLocalKeywords] = useState('');
+  const [requirement, setLocalRequirement] = useState('');
   const [folderInfo, setFolderInfo] = useState<{
     folderName: string;
     professor: string;
   }>({
-    folderName: "",
-    professor: "",
+    folderName: '',
+    professor: '',
   });
 
   useEffect(() => {
@@ -46,10 +47,10 @@ const NewNoteForm: React.FC<NewNoteFormProps> = ({
             professor: currentFolder.professor,
           });
         } else {
-          console.error("Folder not found");
+          console.error('Folder not found');
         }
       } catch (error) {
-        console.error("Failed to fetch folder details:", error);
+        console.error('Failed to fetch folder details:', error);
       }
     };
 
@@ -71,7 +72,7 @@ const NewNoteForm: React.FC<NewNoteFormProps> = ({
           variant="square"
           onChange={() => {}}
           labelClassName="mr-14"
-          disabled={true}
+          disabled
         />
 
         <FormInput
@@ -81,7 +82,7 @@ const NewNoteForm: React.FC<NewNoteFormProps> = ({
           variant="square"
           onChange={() => {}}
           labelClassName="mr-14"
-          disabled={true}
+          disabled
         />
 
         <FormInput
@@ -95,8 +96,15 @@ const NewNoteForm: React.FC<NewNoteFormProps> = ({
 
         <FileUpload
           noteId={noteId}
-          onUploadSuccess={setFile}
-          onUploadError={console.error}
+          onUploadSuccess={(file) => {
+            setFile(file);
+            setTimeout(() => setIsUploading(false), 300); // ✅ 부드러운 transition
+          }}
+          onUploadError={(e) => {
+            console.error(e);
+            setIsUploading(false);
+          }}
+          onUploadingStart={() => setIsUploading(true)} // ✅ 업로드 시작 알림
           label="강의 파일"
           labelClassName="mr-[38px] mt-2"
         />
