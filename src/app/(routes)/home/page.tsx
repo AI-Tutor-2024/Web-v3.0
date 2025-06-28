@@ -102,6 +102,8 @@ const HomePage = () => {
     }
   }, [open]);
 
+  const profName = session?.user.name;
+
   return (
     <div className="flex flex-col justify-between h-full w-full">
       <div className="flex flex-col h-full rounded-t-xl rounded-r-ml rounded-l-ml bg-black-90">
@@ -126,7 +128,7 @@ const HomePage = () => {
               onClick={() => {
                 setIsEditMode(false);
                 setSubject('');
-                setProfessor('');
+                setProfessor(profName || '');
                 setShowModal(true);
               }}
             />
