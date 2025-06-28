@@ -2,6 +2,7 @@
 
 import { PracticeRequest } from '@/app/types/practice';
 import apiClient from '@/app/utils/api';
+import toast from 'react-hot-toast';
 
 // 함수 정의
 export default async function savePracticeQuestions(
@@ -21,7 +22,8 @@ export default async function savePracticeQuestions(
 
     return response.data;
   } catch (error) {
-    console.error('Error saving practice questions:', error);
+    toast.error('Error saving practice questions');
+
     throw error;
   }
 }

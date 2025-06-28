@@ -22,7 +22,7 @@ export const fetchSummary = async ({
     );
     return response.data;
   } catch (error) {
-    console.error('노트 요약문 조회 실패:', error);
+    toast.error('Error at fetching Summary ');
     throw error;
   }
 };

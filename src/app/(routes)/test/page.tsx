@@ -5,6 +5,7 @@ import Button from '@/app/components/atoms/Button';
 import CheckCircle from '@/app/components/atoms/CheckCircle';
 import { FormInput } from '@/app/components/atoms/FormInput';
 import FileUpload from '@/app/components/atoms/FileUpload';
+import toast from 'react-hot-toast';
 import Icon from '@/app/components/atoms/Icon';
 import TabComponent from '@/app/components/atoms/TextInputSection';
 import Popover from '@/app/components/molecules/PopOver';
@@ -55,7 +56,7 @@ const Page = () => {
     try {
       const data = await fetchFolderName();
     } catch (error) {
-      console.error('Error fetching folder names:', error);
+      toast.error('Error fetching folder name');
     }
   };
 
@@ -68,7 +69,7 @@ const Page = () => {
       const data = await getFolders();
       setFolders(data);
     } catch (error) {
-      console.error('Error fetching folders:', error);
+      toast.error('Error fetching folder name');
       setFolders([]);
     }
   };
@@ -89,7 +90,7 @@ const Page = () => {
       setProfessor('');
       setShowModal(false);
     } catch (err) {
-      console.error('Error creating folder:', err);
+      toast.error('Error fetching folder name');
     } finally {
       setIsLoading(false);
     }
@@ -110,7 +111,7 @@ const Page = () => {
         }));
         setShowModal(false);
       } catch (error) {
-        console.error('Error updating folder:', error);
+        toast.error('Error fetching folder name');
       }
     }
   };

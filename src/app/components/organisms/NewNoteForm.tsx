@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FormInput } from '@/app/components/atoms/FormInput';
 import FileUpload from '@/app/components/atoms/FileUpload';
-import { usePracticeContext } from '@/app/context/PracticeContext';
+import toast from 'react-hot-toast';
 import { getFolders } from '@/app/api/folders';
 
 interface NewNoteFormProps {
@@ -11,7 +11,7 @@ interface NewNoteFormProps {
   setFile: (file: File | null) => void;
   setKeywords: (keywords: string) => void;
   setRequirement: (requirement: string) => void;
-  setIsUploading: (uploading: boolean) => void; // ✅ 추가된 prop
+  setIsUploading: (uploading: boolean) => void;
 }
 
 const NewNoteForm: React.FC<NewNoteFormProps> = ({
@@ -21,7 +21,7 @@ const NewNoteForm: React.FC<NewNoteFormProps> = ({
   setFile,
   setKeywords,
   setRequirement,
-  setIsUploading, // ✅ 수신
+  setIsUploading,
 }) => {
   const [keywords, setLocalKeywords] = useState('');
   const [requirement, setLocalRequirement] = useState('');
@@ -47,10 +47,10 @@ const NewNoteForm: React.FC<NewNoteFormProps> = ({
             professor: currentFolder.professor,
           });
         } else {
-          console.error('Folder not found');
+          toast.error('error file detail fetching');
         }
       } catch (error) {
-        console.error('Failed to fetch folder details:', error);
+        toast.error('Failed to fetch folder details:');
       }
     };
 
@@ -98,13 +98,13 @@ const NewNoteForm: React.FC<NewNoteFormProps> = ({
           noteId={noteId}
           onUploadSuccess={(file) => {
             setFile(file);
-            setTimeout(() => setIsUploading(false), 300); // ✅ 부드러운 transition
+            setTimeout(() => setIsUploading(false), 300);
           }}
           onUploadError={(e) => {
-            console.error(e);
+            toast.error('Error File Uploading');
             setIsUploading(false);
           }}
-          onUploadingStart={() => setIsUploading(true)} // ✅ 업로드 시작 알림
+          onUploadingStart={() => setIsUploading(true)}
           label="강의 파일"
           labelClassName="mr-[38px] mt-2"
         />

@@ -1,8 +1,8 @@
-import { useSession, signOut } from "next-auth/react";
-import { useEffect, useRef } from "react";
-import { setAuthToken } from "@/app/utils/api";
-import toast from "react-hot-toast";
-import { refreshAuthToken } from "@/app/api/auth/[...nextauth]/auth";
+import { useSession, signOut } from 'next-auth/react';
+import { useEffect, useRef } from 'react';
+import { setAuthToken } from '@/app/utils/api';
+import toast from 'react-hot-toast';
+import { refreshAuthToken } from '@/app/api/auth/[...nextauth]/auth';
 
 const useAuthInterceptor = () => {
   const { data: session, update } = useSession();
@@ -25,8 +25,8 @@ const useAuthInterceptor = () => {
       }
 
       if (!session.user.refreshToken) {
-        toast.error("리프레시 토큰이 없습니다. 다시 로그인해주세요.");
-        signOut({ callbackUrl: "/login" });
+        toast.error('리프레시 토큰이 없습니다. 다시 로그인해주세요.');
+        signOut({ callbackUrl: '/login' });
         return;
       }
 
@@ -36,7 +36,7 @@ const useAuthInterceptor = () => {
         const newTokens = await refreshAuthToken(session.user.refreshToken);
 
         if (!newTokens?.accessToken || !newTokens?.refreshToken) {
-          throw new Error("토큰 갱신 응답이 올바르지 않습니다.");
+          throw new Error('토큰 갱신 응답이 올바르지 않습니다.');
         }
 
         setAuthToken(newTokens.accessToken);
@@ -50,21 +50,20 @@ const useAuthInterceptor = () => {
         });
 
         if (!updatedSession?.user?.aiTutorToken) {
-          throw new Error("세션 업데이트 실패");
+          throw new Error('세션 업데이트 실패');
         }
 
-        toast.success("세션이 갱신되었습니다.");
+        toast.success('세션이 갱신되었습니다.');
       } catch (error: any) {
-        console.error("토큰 갱신 실패:", error);
         toast.error(`세션 갱신 실패: ${error.message}`);
-        signOut({ callbackUrl: "/login" });
+        signOut({ callbackUrl: '/login' });
       } finally {
         isRefreshing.current = false;
       }
     }, REFRESH_TIMEOUT);
 
     const redirectTimer = setTimeout(() => {
-      signOut({ callbackUrl: "/login" });
+      signOut({ callbackUrl: '/login' });
     }, REDIRECT_TIMEOUT);
 
     return () => {

@@ -9,6 +9,7 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import { SummaryPDFDocument } from '@/app/utils/pdfExportSummary';
 import { getPractice } from '@/app/api/practice/getPractice';
 import { useSession } from 'next-auth/react';
+import toast from 'react-hot-toast';
 
 export default function SummaryPage() {
   const { folderId, noteId } = useParams();
@@ -31,7 +32,7 @@ export default function SummaryPage() {
         const data = await getPractice(Number(noteId));
         setPracticeQuestions(data?.information || []);
       } catch (e) {
-        console.error('문제 조회 실패', e);
+        toast.error('문제 조회 실패', e);
         setPracticeQuestions([]);
       } finally {
         setIsLoading(false);

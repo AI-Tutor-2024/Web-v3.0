@@ -1,4 +1,5 @@
 import apiClient from '@/app/utils/api';
+import toast from 'react-hot-toast';
 interface CreatePracticeReq {
   practiceSize: number;
   type: string; // 문제의 유형 (예: "OX")
@@ -37,7 +38,7 @@ export const postSummary = async ({ file, request }: PostSummaryProps) => {
 
     return response.data;
   } catch (error) {
-    console.error('Upload error:', error);
+    toast.error('Upload error');
     throw error;
   }
 };

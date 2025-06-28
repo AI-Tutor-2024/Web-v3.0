@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import ReviewQuestions from "@/app/components/organisms/ReviewQuestions";
-import Info from "@/app/components/molecules/Info";
-import { usePracticeContext } from "@/app/context/PracticeContext";
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import ReviewQuestions from '@/app/components/organisms/ReviewQuestions';
+import Info from '@/app/components/molecules/Info';
+import { usePracticeContext } from '@/app/context/PracticeContext';
 import {
   getPractice,
   PracticeItemResponse,
-} from "@/app/api/practice/getPractice";
+} from '@/app/api/practice/getPractice';
 
 const ResultPage = () => {
   const params = useParams<{ folderId: string; noteId: string }>();
@@ -31,10 +31,8 @@ const ResultPage = () => {
         } else {
           setPracticeQuestions([]);
           setQuestions([]);
-          console.warn("API 응답에 information 필드가 없습니다.", data);
         }
       } catch (e) {
-        console.error("문제 조회 실패", e);
         setPracticeQuestions([]);
         setQuestions([]);
       } finally {

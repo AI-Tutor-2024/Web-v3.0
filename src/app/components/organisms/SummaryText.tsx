@@ -2,6 +2,7 @@ import React from 'react';
 import { baseURL } from '@/app/api/index';
 import { usePracticeContext } from '@/app/context/PracticeContext';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 import { parseMarkdown } from '@/app/utils/parseMarkdown';
 import {
   Document,
@@ -60,7 +61,7 @@ const SummaryText: React.FC<SummaryTextProps> = ({ folderId, noteId }) => {
       );
       setSummary(response.data.information.summary);
     } catch (error) {
-      console.error('Failed to fetch summary:', error);
+      toast.error('error : fetch Summary');
     }
   };
 

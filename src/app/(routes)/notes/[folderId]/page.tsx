@@ -51,7 +51,7 @@ const NotesPage = () => {
           const notesData: NoteResponse = await fetchNotes(Number(folderId));
           setNotes(notesData.noteListDetailRes);
         } catch (error) {
-          console.error('Failed to load notes:', error);
+          toast.error('Failed to load notes');
         } finally {
           setLoading(false);
         }
@@ -67,7 +67,7 @@ const NotesPage = () => {
       const notesData: NoteResponse = await fetchNotes(Number(folderId));
       setNotes(notesData.noteListDetailRes);
     } catch (error) {
-      console.error('Failed to delete note:', error);
+      toast.error('Failed to delete notes');
     }
   };
 
