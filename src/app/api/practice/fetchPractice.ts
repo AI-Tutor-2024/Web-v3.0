@@ -3,7 +3,7 @@
 import axios from 'axios';
 import { baseURL } from '..';
 import apiClient from '@/app/utils/api';
-
+import toast from 'react-hot-toast';
 interface FetchPracticeResponse {
   information: {
     practiceId: number;
@@ -26,7 +26,7 @@ export const fetchPractice = async (
 
     return response.data;
   } catch (error) {
-    console.error('Error fetching practice questions:', error);
+    toast.error('Error fetching Practice');
     throw error;
   }
 };

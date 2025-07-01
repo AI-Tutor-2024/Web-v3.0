@@ -47,7 +47,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
 
         setTimeout(
           () => uploadSimulation(nextProgress),
-          Math.random() * 30 + 50
+          Math.random() * 10 + 10
         );
       } else {
         setIsUploading(false);

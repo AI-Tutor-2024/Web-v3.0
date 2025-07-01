@@ -126,7 +126,7 @@ const Page = () => {
         [folderId]: false,
       }));
     } catch (error) {
-      console.error('Error deleting folder:', error);
+      toast.error('Error fetching folder name');
     }
   };
 
@@ -141,7 +141,7 @@ const Page = () => {
   const handleUploadError = (err: any) => {
     setResponseData(null);
     setError('업로드 중 오류가 발생했습니다.');
-    console.error('Upload Error:', err);
+    toast.error('Error fetching folder name');
   };
 
   const handleCountChange = (event: React.ChangeEvent<HTMLInputElement>) => {

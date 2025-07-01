@@ -32,7 +32,7 @@ export default function SummaryPage() {
         const data = await getPractice(Number(noteId));
         setPracticeQuestions(data?.information || []);
       } catch (e) {
-        toast.error('문제 조회 실패', e);
+        toast.error('문제 조회 실패');
         setPracticeQuestions([]);
       } finally {
         setIsLoading(false);
