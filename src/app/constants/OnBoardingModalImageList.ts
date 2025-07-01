@@ -32,4 +32,10 @@ export const slides = [
     title: '필요한 문제 개수와 원하는 문제 유형을 선택하세요!',
     desc: '만들기 버튼으로 문제를 직접 만들어보세요!',
   },
+
+  {
+    background: '/IMG/slide7.png',
+    title: 'AI TUTOR와 함께 학생들의 복습을 간편하게 지원해보세요!',
+    desc: '',
+  },
 ];
