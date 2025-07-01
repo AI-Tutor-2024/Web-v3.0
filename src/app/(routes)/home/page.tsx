@@ -125,9 +125,8 @@ const HomePage = () => {
         </div>
 
         <div className="bg-black-80 rounded-lg rounded-b-none mx-4 h-full">
-          <div className="flex text-center">
-            {isOpen && <OnBoardingModal></OnBoardingModal>}
-          </div>
+          {isOpen && <OnBoardingModal></OnBoardingModal>}
+
           {folders.length === 0 ? (
             <div className="flex flex-col justify-center items-center h-full text-center text-white">
               <div className="flex items-center justify-center"> </div>
