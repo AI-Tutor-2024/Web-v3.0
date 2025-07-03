@@ -80,7 +80,7 @@ const CreatePracticePage = () => {
       setQuestions(createRes.information.practiceResList);
       setSummary(createRes.information.summary);
 
-      router.push(`/notes/${folderId}/${noteId}/result`);
+      router.push(`/note/${folderId}/${noteId}/result`);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         toast.error(
