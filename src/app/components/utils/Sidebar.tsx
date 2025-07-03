@@ -1,18 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useOnboardingstore } from '@/app/store/useOnboardingStore';
 import Link from 'next/link';
 import Icon from '../atoms/Icon';
-import { setAuthToken } from '@/app/utils/api';
-import { useSession } from 'next-auth/react';
-import useFetchFolderContent from '@/app/hooks/folder/useFetchFolderContent';
-import { useParams, usePathname } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 
-const Sidebar: React.FC = () => {
-  const { data: session } = useSession();
-  const token = session?.user?.aiTutorToken;
-  const [isAuthSet, setIsAuthSet] = useState(false);
+interface SidebarProps {
+  data?: any;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ data }) => {
   const { open } = useOnboardingstore();
 
   type Note = {
@@ -29,12 +27,11 @@ const Sidebar: React.FC = () => {
 
   const pathname = usePathname();
   const params = useParams();
+  const router = useRouter();
 
   const currentFolderId = params.folderId;
   const currentNoteId = params.noteId;
   const isHome = pathname === '/home';
-
-  const { data, isLoading, error } = useFetchFolderContent(token ?? undefined);
   const folders = data?.folderNoteDetailList || [];
 
   const [showSections, setShowSections] = useState(false);
@@ -53,13 +50,6 @@ const Sidebar: React.FC = () => {
   const handleGuideClick = () => {
     open();
   };
-
-  useEffect(() => {
-    if (token) {
-      setAuthToken(token);
-      setIsAuthSet(true);
-    }
-  }, [token]);
 
   return (
     <div className="min-w-[220px] h-screen justify-between flex flex-col z-20 bg-black">
@@ -112,16 +102,18 @@ const Sidebar: React.FC = () => {
 
                 return (
                   <div key={folder.folderId}>
-                    <div
-                      onClick={() => toggleNote(folder.folderId)}
-                      className="px-8 py-2 flex justify-between flex-row text-center gap-3 cursor-pointer"
-                    >
+                    <div className="px-8 py-2 flex justify-between flex-row text-center gap-3 cursor-pointer">
                       <div className="flex flex-row gap-3">
                         <Icon
                           label="ic_side_folder"
                           className="w-[20px] h-[20px] my-auto"
                         />
-                        <p className="text-base text-white flex-shrink-0">
+                        <p
+                          onClick={() =>
+                            router.push(`/notes/${folder.folderId}`)
+                          }
+                          className="text-base text-white flex-shrink-0"
+                        >
                           {folder.folderName}
                         </p>
                       </div>
@@ -133,6 +125,7 @@ const Sidebar: React.FC = () => {
                               ? '-rotate-90'
                               : 'rotate-90'
                           }`}
+                          onClick={() => toggleNote(folder.folderId)}
                         />
                       )}
                     </div>

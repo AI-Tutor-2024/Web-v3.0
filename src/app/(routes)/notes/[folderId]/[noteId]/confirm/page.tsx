@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import toast from 'react-hot-toast';
 
 import Button from '@/app/components/atoms/Button';
 import TextInputSection from '@/app/components/atoms/TextInputSection';
@@ -48,6 +47,7 @@ const ConfirmNotePage = () => {
   }, [file, folderId, noteId, setSttLoading]);
 
   const handleNoteFinalBtn = async () => {
+
     if (sttLoading || summaryLoading) return;
 
     if (!keywords || !requirement) {
@@ -69,6 +69,7 @@ const ConfirmNotePage = () => {
     } finally {
       setSummaryLoading(false);
     }
+
   };
 
   return (

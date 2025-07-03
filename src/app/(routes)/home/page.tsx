@@ -1,5 +1,6 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import Button from '@/app/components/atoms/Button';
 import {
   SectionFolder,
@@ -19,15 +20,18 @@ import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import speach_bubble from '../../../../public/speech_bubble.svg';
 import { Folder } from '@/app/types/folder';
+import useAuthInterceptor from '@/app/hooks/auth/useAuthInterceptor';
 
 import OnBoardingModal from '@/app/components/molecules/OnBoardingModal';
 import toast from 'react-hot-toast';
 import { DeleteModal } from '@/app/components/molecules/Modal';
+
 const HomePage = () => {
   const { data: session, status } = useSession();
+  const router = useRouter();
 
   const token = session?.user?.aiTutorToken;
-  const { data: folders = [] } = useFetchFolders({
+  const { data: folders = [], refetch } = useFetchFolders({
     enabled: status === 'authenticated' && !!token,
   });
   const createFolder = useCreateFolder();
@@ -42,6 +46,7 @@ const HomePage = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState<number | null>(null);
+  const hasRefetched = useRef(false);
 
   const handleCreateFolder = async (): Promise<boolean> => {
     if (!subject) {
@@ -72,7 +77,7 @@ const HomePage = () => {
       professorName: professor,
     });
 
-    setShowModify((prev) => ({ ...prev, [selectedFolder.folderId]: false }));
+    setShowModify(prev => ({ ...prev, [selectedFolder.folderId]: false }));
     setShowModal(false);
     return true;
   };
@@ -84,12 +89,18 @@ const HomePage = () => {
     setPendingDeleteId(null);
   };
 
+  useAuthInterceptor();
+
+  useEffect(() => {
+    refetch();
+  }, [token, status, refetch, folders.length]);
+
   useEffect(() => {
     if (getIsFirstTimeUser()) {
       open();
       setIsFirstTimeUser(false);
     }
-  }, []);
+  }, [open]);
 
   const profName = session?.user.name;
 
@@ -154,7 +165,7 @@ const HomePage = () => {
                     }}
                     noteIsExist={folder.noteCount > 0}
                     onMenuClick={() =>
-                      setShowModify((prev) => ({
+                      setShowModify(prev => ({
                         ...prev,
                         [folder.folderId]: !prev[folder.folderId],
                       }))
@@ -167,7 +178,7 @@ const HomePage = () => {
                         section={folder}
                         onEditClick={() => {
                           setIsEditMode(true);
-                          setShowModify((prev) => ({
+                          setShowModify(prev => ({
                             ...prev,
                             [folder.folderId]: false,
                           }));

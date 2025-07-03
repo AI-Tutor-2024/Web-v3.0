@@ -9,7 +9,11 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import { SummaryPDFDocument } from '@/app/utils/pdfExportSummary';
 import { getPractice } from '@/app/api/practice/getPractice';
 import { useSession } from 'next-auth/react';
+
 import toast from 'react-hot-toast';
+
+import { setAuthToken } from '@/app/utils/api';
+
 
 export default function SummaryPage() {
   const { folderId, noteId } = useParams();
@@ -73,6 +77,12 @@ export default function SummaryPage() {
     window.addEventListener('resize', updateWidth);
     return () => window.removeEventListener('resize', updateWidth);
   }, []);
+
+  useEffect(() => {
+    if (token) {
+      setAuthToken(token);
+    }
+  }, [token]);
 
   return (
     <div className="flex min-h-screen bg-black-100 p-8 flex-col">
