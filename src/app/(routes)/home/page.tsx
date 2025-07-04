@@ -77,7 +77,7 @@ const HomePage = () => {
       professorName: professor,
     });
 
-    setShowModify(prev => ({ ...prev, [selectedFolder.folderId]: false }));
+    setShowModify((prev) => ({ ...prev, [selectedFolder.folderId]: false }));
     setShowModal(false);
     return true;
   };
@@ -101,6 +101,8 @@ const HomePage = () => {
       setIsFirstTimeUser(false);
     }
   }, [open]);
+
+  const profName = session?.user.name;
 
   return (
     <div className="flex flex-col justify-between h-full w-full">
@@ -126,7 +128,7 @@ const HomePage = () => {
               onClick={() => {
                 setIsEditMode(false);
                 setSubject('');
-                setProfessor('');
+                setProfessor(profName || '');
                 setShowModal(true);
               }}
             />
@@ -134,9 +136,8 @@ const HomePage = () => {
         </div>
 
         <div className="bg-black-80 rounded-lg rounded-b-none mx-4 h-full">
-          <div className="flex text-center">
-            {isOpen && <OnBoardingModal></OnBoardingModal>}
-          </div>
+          {isOpen && <OnBoardingModal></OnBoardingModal>}
+
           {folders.length === 0 ? (
             <div className="flex flex-col justify-center items-center h-full text-center text-white">
               <div className="flex items-center justify-center"> </div>
@@ -164,7 +165,7 @@ const HomePage = () => {
                     }}
                     noteIsExist={folder.noteCount > 0}
                     onMenuClick={() =>
-                      setShowModify(prev => ({
+                      setShowModify((prev) => ({
                         ...prev,
                         [folder.folderId]: !prev[folder.folderId],
                       }))
@@ -177,7 +178,7 @@ const HomePage = () => {
                         section={folder}
                         onEditClick={() => {
                           setIsEditMode(true);
-                          setShowModify(prev => ({
+                          setShowModify((prev) => ({
                             ...prev,
                             [folder.folderId]: false,
                           }));

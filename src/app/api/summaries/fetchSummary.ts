@@ -1,6 +1,5 @@
-import axios from 'axios';
-import { baseURL } from '..';
 import apiClient from '@/app/utils/api';
+import toast from 'react-hot-toast';
 
 interface FetchSummaryRequest {
   folderId: number;
@@ -22,7 +21,7 @@ export const fetchSummary = async ({
     );
     return response.data;
   } catch (error) {
-    console.error('노트 요약문 조회 실패:', error);
+    toast.error('요약본을 불러오는데 실패했어요.');
     throw error;
   }
 };

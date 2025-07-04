@@ -1,13 +1,13 @@
-import React, { useCallback, useEffect, useState } from "react";
-import Button from "@/app/components/atoms/Button";
-import Icon from "@/app/components/atoms/Icon";
-import CheckCircle from "@/app/components/atoms/CheckCircle";
-import { FormInput } from "@/app/components/atoms/FormInput";
-import { getPractice } from "@/app/api/practice/getPractice";
-import { usePracticeContext } from "@/app/context/PracticeContext";
-import updatePractice from "@/app/api/practice/updatePractice";
-import toast from "react-hot-toast";
-import { exportQuestionsToPDF } from "@/app/utils/pdfExport";
+import React, { useCallback, useEffect, useState } from 'react';
+import Button from '@/app/components/atoms/Button';
+import Icon from '@/app/components/atoms/Icon';
+import CheckCircle from '@/app/components/atoms/CheckCircle';
+import { FormInput } from '@/app/components/atoms/FormInput';
+import { getPractice } from '@/app/api/practice/getPractice';
+import { usePracticeContext } from '@/app/context/PracticeContext';
+import updatePractice from '@/app/api/practice/updatePractice';
+import toast from 'react-hot-toast';
+import { exportQuestionsToPDF } from '@/app/utils/pdfExport';
 
 interface ReqList {
   practiceId: number;
@@ -15,7 +15,7 @@ interface ReqList {
   content: string;
   result: string;
   solution: string;
-  practiceType: "OX" | "SHORT";
+  practiceType: 'OX' | 'SHORT';
 }
 
 interface ReviewQuestionsProps {
@@ -51,12 +51,12 @@ const ReviewQuestions: React.FC<ReviewQuestionsProps> = ({ noteId }) => {
           content: item.content,
           result: item.result,
           solution: item.solution,
-          practiceType: item.practiceType as "OX" | "SHORT",
+          practiceType: item.practiceType as 'OX' | 'SHORT',
         }));
         setFilteredQuestions(converted);
         setIsEditable(false);
       } catch (error) {
-        console.error("Failed to load practice questions:", error);
+        toast.error('문제를 불러오는데 실패했어요.');
       } finally {
         setLoading(false);
       }
@@ -104,11 +104,11 @@ const ReviewQuestions: React.FC<ReviewQuestionsProps> = ({ noteId }) => {
         if (!originalQuestion) return;
         await updatePractice(noteId, originalQuestion.practiceId, {
           practiceNumber,
-          content: editedQuestion?.content || originalQuestion.content || "",
+          content: editedQuestion?.content || originalQuestion.content || '',
           additionalResults: [],
-          result: editedQuestion?.result || originalQuestion.result || "",
-          solution: originalQuestion.solution || "",
-          practiceType: originalQuestion.practiceType || "OX",
+          result: editedQuestion?.result || originalQuestion.result || '',
+          solution: originalQuestion.solution || '',
+          practiceType: originalQuestion.practiceType || 'OX',
         });
 
         setFilteredQuestions(
@@ -136,7 +136,7 @@ const ReviewQuestions: React.FC<ReviewQuestionsProps> = ({ noteId }) => {
 
   const handleInputChange = (
     practiceNumber: number,
-    field: "content" | "result",
+    field: 'content' | 'result',
     value: string
   ) => {
     setEditedQuestions((prev) => ({
@@ -160,14 +160,14 @@ const ReviewQuestions: React.FC<ReviewQuestionsProps> = ({ noteId }) => {
       selectedQuestions.includes(q.practiceNumber)
     );
     if (selected.length === 0) {
-      toast.error("선택된 문제가 없습니다.");
+      toast.error('선택된 문제가 없습니다.');
       return;
     }
     try {
       await exportQuestionsToPDF(selected);
-      toast.success("PDF로 저장되었습니다.");
+      toast.success('PDF로 저장되었습니다.');
     } catch (e) {
-      toast.error("PDF 저장에 실패했습니다.");
+      toast.error('PDF 저장에 실패했습니다.');
     }
   };
 
@@ -231,7 +231,7 @@ const ReviewQuestions: React.FC<ReviewQuestionsProps> = ({ noteId }) => {
                 <div className="whitespace-nowrap items-center w-full flex flex-col">
                   <Button
                     label={
-                      question.practiceType === "OX" ? "OX 퀴즈" : "단답형"
+                      question.practiceType === 'OX' ? 'OX 퀴즈' : '단답형'
                     }
                     variant="select"
                     disabled={true}
@@ -250,7 +250,7 @@ const ReviewQuestions: React.FC<ReviewQuestionsProps> = ({ noteId }) => {
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                       handleInputChange(
                         question.practiceNumber,
-                        "content",
+                        'content',
                         e.target.value
                       )
                     }
@@ -263,9 +263,9 @@ const ReviewQuestions: React.FC<ReviewQuestionsProps> = ({ noteId }) => {
 
               <td className="p-1">
                 {editMode[question.practiceNumber] ? (
-                  question.practiceType === "OX" ? (
+                  question.practiceType === 'OX' ? (
                     <div className="flex items-center justify-center gap-2">
-                      {["O", "X"].map((val) => {
+                      {['O', 'X'].map((val) => {
                         const selected =
                           (editedQuestions[question.practiceNumber]?.result ||
                             question.result) === val;
@@ -276,12 +276,12 @@ const ReviewQuestions: React.FC<ReviewQuestionsProps> = ({ noteId }) => {
                             onClick={() =>
                               handleInputChange(
                                 question.practiceNumber,
-                                "result",
+                                'result',
                                 val
                               )
                             }
                             className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors duration-200
-                              ${selected ? "bg-primary" : "bg-[#444]"}`}
+                              ${selected ? 'bg-primary' : 'bg-[#444]'}`}
                           >
                             <span className="text-white text-base ">{val}</span>
                           </button>
@@ -298,7 +298,7 @@ const ReviewQuestions: React.FC<ReviewQuestionsProps> = ({ noteId }) => {
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                         handleInputChange(
                           question.practiceNumber,
-                          "result",
+                          'result',
                           e.target.value
                         )
                       }

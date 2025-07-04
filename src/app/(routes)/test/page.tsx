@@ -1,31 +1,32 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import Button from "@/app/components/atoms/Button";
-import CheckCircle from "@/app/components/atoms/CheckCircle";
-import { FormInput } from "@/app/components/atoms/FormInput";
-import FileUpload from "@/app/components/atoms/FileUpload";
-import Icon from "@/app/components/atoms/Icon";
-import TabComponent from "@/app/components/atoms/TextInputSection";
-import Popover from "@/app/components/molecules/PopOver";
-import CountInput from "@/app/components/atoms/CountInput";
+import React, { useEffect, useState } from 'react';
+import Button from '@/app/components/atoms/Button';
+import CheckCircle from '@/app/components/atoms/CheckCircle';
+import { FormInput } from '@/app/components/atoms/FormInput';
+import FileUpload from '@/app/components/atoms/FileUpload';
+import toast from 'react-hot-toast';
+import Icon from '@/app/components/atoms/Icon';
+import TabComponent from '@/app/components/atoms/TextInputSection';
+import Popover from '@/app/components/molecules/PopOver';
+import CountInput from '@/app/components/atoms/CountInput';
 import {
   SectionFolder,
   SectionModal,
   SectionModify,
-} from "@/app/components/molecules/Modal";
-import { FolderListData } from "@/app/types/folder";
+} from '@/app/components/molecules/Modal';
+import { FolderListData } from '@/app/types/folder';
 import {
   createFolder,
   deleteFolder,
   fetchFolderName,
   getFolders,
   updateFolder,
-} from "@/app/api/folders";
-import Info from "@/app/components/molecules/Info";
-import NoteList from "@/app/components/organisms/NoteList";
-import ReviewQuestions from "@/app/components/organisms/ReviewQuestions";
-import { useSession } from "next-auth/react";
+} from '@/app/api/folders';
+import Info from '@/app/components/molecules/Info';
+import NoteList from '@/app/components/organisms/NoteList';
+import ReviewQuestions from '@/app/components/organisms/ReviewQuestions';
+import { useSession } from 'next-auth/react';
 
 const Page = () => {
   const { data: session } = useSession();
@@ -36,27 +37,26 @@ const Page = () => {
   );
   const [showModify, setShowModify] = useState<{ [key: string]: boolean }>({});
   const [showModal, setShowModal] = useState(false);
-  const [subject, setSubject] = useState("");
-  const [professor, setProfessor] = useState("");
+  const [subject, setSubject] = useState('');
+  const [professor, setProfessor] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
 
   const [isSelected, setIsSelected] = useState([false, false, false, false]);
   const [checkedStates, setCheckedStates] = useState([false, false]);
-  const [formInputValue, setFormInputValue] = useState("");
-  const [keywords, setKeywords] = useState("");
-  const [requirement, setRequirement] = useState("");
+  const [formInputValue, setFormInputValue] = useState('');
+  const [keywords, setKeywords] = useState('');
+  const [requirement, setRequirement] = useState('');
   const [responseData, setResponseData] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [showPopover, setShowPopover] = useState<"OX" | "단답형" | null>(null);
-  const [count, setCount] = useState("");
+  const [showPopover, setShowPopover] = useState<'OX' | '단답형' | null>(null);
+  const [count, setCount] = useState('');
 
   const fetchFolderNames = async () => {
     try {
       const data = await fetchFolderName();
-      console.log(data);
     } catch (error) {
-      console.error("Error fetching folder names:", error);
+      toast.error('폴더 불러오는데 실패했어요.');
     }
   };
 
@@ -69,7 +69,7 @@ const Page = () => {
       const data = await getFolders();
       setFolders(data);
     } catch (error) {
-      console.error("Error fetching folders:", error);
+      toast.error('폴더 불러오는데 실패했어요.');
       setFolders([]);
     }
   };
@@ -86,11 +86,11 @@ const Page = () => {
         professorName: professor,
       });
       await fetchFolders();
-      setSubject("");
-      setProfessor("");
+      setSubject('');
+      setProfessor('');
       setShowModal(false);
     } catch (err) {
-      console.error("Error creating folder:", err);
+      toast.error('폴더 불러오는데 실패했어요.');
     } finally {
       setIsLoading(false);
     }
@@ -111,7 +111,7 @@ const Page = () => {
         }));
         setShowModal(false);
       } catch (error) {
-        console.error("Error updating folder:", error);
+        toast.error('폴더 불러오는데 실패했어요.');
       }
     }
   };
@@ -126,7 +126,7 @@ const Page = () => {
         [folderId]: false,
       }));
     } catch (error) {
-      console.error("Error deleting folder:", error);
+      toast.error('폴더 불러오는데 실패했어요.');
     }
   };
 
@@ -140,8 +140,8 @@ const Page = () => {
 
   const handleUploadError = (err: any) => {
     setResponseData(null);
-    setError("업로드 중 오류가 발생했습니다.");
-    console.error("Upload Error:", err);
+    setError('업로드 중 오류가 발생했습니다.');
+    toast.error('폴더 불러오는데 실패했어요.');
   };
 
   const handleCountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -215,8 +215,8 @@ const Page = () => {
         variant="create"
         onClick={() => {
           setIsEditMode(false); // 생성 모드
-          setSubject("");
-          setProfessor("");
+          setSubject('');
+          setProfessor('');
           setShowModal(true);
         }}
       />
@@ -305,11 +305,11 @@ const Page = () => {
             variant="select"
             isSelected={isSelected[0]}
             onClick={() => handleSelectClick(0)}
-            onMouseEnter={() => setShowPopover("OX")}
+            onMouseEnter={() => setShowPopover('OX')}
             onMouseLeave={() => setShowPopover(null)}
           />
-          {showPopover === "OX" && (
-            <Popover type="OX" position={{ top: "60px", left: "0px" }} />
+          {showPopover === 'OX' && (
+            <Popover type="OX" position={{ top: '60px', left: '0px' }} />
           )}
         </div>
 
@@ -320,11 +320,11 @@ const Page = () => {
             variant="select"
             isSelected={isSelected[1]}
             onClick={() => handleSelectClick(1)}
-            onMouseEnter={() => setShowPopover("단답형")}
+            onMouseEnter={() => setShowPopover('단답형')}
             onMouseLeave={() => setShowPopover(null)}
           />
-          {showPopover === "단답형" && (
-            <Popover type="단답형" position={{ top: "60px", left: "0px" }} />
+          {showPopover === '단답형' && (
+            <Popover type="단답형" position={{ top: '60px', left: '0px' }} />
           )}
         </div>
         <Button

@@ -9,6 +9,9 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import { SummaryPDFDocument } from '@/app/utils/pdfExportSummary';
 import { getPractice } from '@/app/api/practice/getPractice';
 import { useSession } from 'next-auth/react';
+
+import toast from 'react-hot-toast';
+
 import { setAuthToken } from '@/app/utils/api';
 
 export default function SummaryPage() {
@@ -24,15 +27,19 @@ export default function SummaryPage() {
   const [leftWidth, setLeftWidth] = useState<number | null>(null);
   const { data: session, status } = useSession();
   const token = session?.user?.aiTutorToken;
+  const hasFetchedSummary = useRef(false);
+  const hasFetchedPractice = useRef(false);
 
   useEffect(() => {
+    if (hasFetchedPractice.current) return;
     const fetchPractice = async () => {
       try {
+        hasFetchedPractice.current = true;
         setIsLoading(true);
         const data = await getPractice(Number(noteId));
         setPracticeQuestions(data?.information || []);
       } catch (e) {
-        console.error('문제 조회 실패', e);
+        toast.error('문제 조회 실패');
         setPracticeQuestions([]);
       } finally {
         setIsLoading(false);
@@ -45,10 +52,12 @@ export default function SummaryPage() {
   }, [noteId, token]);
 
   useEffect(() => {
+    if (hasFetchedSummary.current) return;
     const fetchData = async () => {
       if (!folderId || !noteId) return;
       setLoading(true);
       try {
+        hasFetchedSummary.current = true;
         const data = await fetchSummary({
           folderId: Number(folderId),
           noteId: Number(noteId),

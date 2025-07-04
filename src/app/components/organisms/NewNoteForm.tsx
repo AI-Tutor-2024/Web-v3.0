@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { FormInput } from "@/app/components/atoms/FormInput";
-import FileUpload from "@/app/components/atoms/FileUpload";
-import TabComponent from "@/app/components/atoms/TextInputSection";
-import { usePracticeContext } from "@/app/context/PracticeContext";
-import { getFolders } from "@/app/api/folders";
-import { useSession } from "next-auth/react";
-
+import React, { useEffect, useState } from 'react';
+import { FormInput } from '@/app/components/atoms/FormInput';
+import FileUpload from '@/app/components/atoms/FileUpload';
+import TabComponent from '@/app/components/atoms/TextInputSection';
+import { usePracticeContext } from '@/app/context/PracticeContext';
+import { getFolders } from '@/app/api/folders';
+import toast from 'react-hot-toast';
 interface NewNoteFormProps {
   folderId: number;
   noteId: number;
@@ -22,14 +21,14 @@ const NewNoteForm: React.FC<NewNoteFormProps> = ({
 }) => {
   const { setFile, setKeywords, setRequirement } = usePracticeContext();
 
-  const [keywords, setLocalKeywords] = useState("");
-  const [requirement, setLocalRequirement] = useState("");
+  const [keywords, setLocalKeywords] = useState('');
+  const [requirement, setLocalRequirement] = useState('');
   const [folderInfo, setFolderInfo] = useState<{
     folderName: string;
     professor: string;
   }>({
-    folderName: "",
-    professor: "",
+    folderName: '',
+    professor: '',
   });
 
   useEffect(() => {
@@ -46,10 +45,9 @@ const NewNoteForm: React.FC<NewNoteFormProps> = ({
             professor: currentFolder.professor,
           });
         } else {
-          console.error("Folder not found");
         }
       } catch (error) {
-        console.error("Failed to fetch folder details:", error);
+        toast.error('폴더 세부내용을 가져오는데 실패했어요.');
       }
     };
 

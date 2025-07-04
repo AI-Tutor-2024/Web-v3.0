@@ -92,10 +92,12 @@ const OnBoardingCarousel: React.FC<OnBoardingCarouselProps> = ({
         {slides.map((slide, idx) => (
           <div
             key={idx}
-            className="flex flex-col justify-center items-center h-full"
+            className="flex flex-col justify-center min-h-[130px]  items-center h-full"
           >
-            <p className="text-black font-semibold mt-4">{slide.title}</p>
-            <p className="mt-2 text-black">{slide.desc}</p>
+            <p className="text-black text-center font-semibold mt-4">
+              {slide.title}
+            </p>
+            <p className="mt-2 text-black text-center">{slide.desc}</p>
           </div>
         ))}
       </Slider>

@@ -1,9 +1,9 @@
 // app/api/practice/fetchPractice.ts
 
-import axios from "axios";
-import { baseURL } from "..";
-import apiClient from "@/app/utils/api";
-
+import axios from 'axios';
+import { baseURL } from '..';
+import apiClient from '@/app/utils/api';
+import toast from 'react-hot-toast';
 interface FetchPracticeResponse {
   information: {
     practiceId: number;
@@ -12,7 +12,7 @@ interface FetchPracticeResponse {
     result: string;
     additionalResults: string | null;
     solution: string;
-    practiceType: "OX" | "SHORT";
+    practiceType: 'OX' | 'SHORT';
   }[];
 }
 
@@ -23,10 +23,10 @@ export const fetchPractice = async (
     const response = await apiClient.get(
       `/api/v1/professor/practice/${noteId}`
     );
-    console.log("fetchPractice response:", response);
+
     return response.data;
   } catch (error) {
-    console.error("Error fetching practice questions:", error);
+    toast.error('폴더 불러오는데 실패했어요.');
     throw error;
   }
 };

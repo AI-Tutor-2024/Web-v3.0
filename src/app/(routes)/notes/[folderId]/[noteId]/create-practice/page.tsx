@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { usePracticeContext } from '@/app/context/PracticeContext';
 import NewPracticeForm from '@/app/components/organisms/NewPracticeForm';
@@ -27,7 +27,6 @@ interface CreatePracticeApiResponse {
 
 const CreatePracticePage = () => {
   const router = useRouter();
-  const [isFormValid, setIsFormValid] = useState(false);
   const { folderId, noteId } = useParams();
   const {
     file,
@@ -40,7 +39,9 @@ const CreatePracticePage = () => {
     setSummary,
   } = usePracticeContext();
 
+  const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const hasRunSTTRef = useRef(false);
 
   const handleCreatePractice = async () => {
     if (!noteId || !file || file.size === 0) {
@@ -56,9 +57,12 @@ const CreatePracticePage = () => {
     try {
       setIsLoading(true);
 
-      await createSTT(Number(folderId), Number(noteId), file);
+      if (!hasRunSTTRef.current) {
+        hasRunSTTRef.current = true;
+        await createSTT(Number(folderId), Number(noteId), file);
+      }
 
-      const createPayLoad = {
+      const createPayload = {
         noteId: Number(noteId),
         createPracticeReq: {
           practiceSize: practiceSize || undefined,
@@ -69,14 +73,14 @@ const CreatePracticePage = () => {
       };
 
       const createRes: CreatePracticeApiResponse = await createPractice(
-        createPayLoad
+        createPayload
       );
-      toast.success('문제 생성이 완료되었습니다.');
 
+      toast.success('문제 생성이 완료되었습니다.');
       setQuestions(createRes.information.practiceResList);
       setSummary(createRes.information.summary);
 
-      router.push(`/notes/${folderId}/${noteId}/result`);
+      router.push(`/note/${folderId}/${noteId}/result`);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         toast.error(
@@ -103,27 +107,25 @@ const CreatePracticePage = () => {
       {isLoading && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <Loader
-            message="STT 기반으로 노트를 생성 중이에요"
+            message="요약문을 기반으로 퀴즈를 생성 중이에요."
             subMessage="약 1분 정도 소요돼요, 잠시만 기다려 주세요!"
           />
         </div>
       )}
       <div className="flex flex-col justify-between h-full p-8">
-        <div className="flex flex-row w-full justify-between items-center align-middle pb-8">
+        <div className="flex flex-row w-full justify-between items-center pb-8">
           <div className="flex flex-col justify-start gap-2">
             <p className="text-white text-2xl font-bold">새로운 수업</p>
             <p className="text-white text-sm font-normal">
               복습 문제 옵션을 선택하세요
             </p>
           </div>
-          <div>
-            <Button
-              label="만들기"
-              variant="next"
-              disabled={!isFormValid || isLoading}
-              onClick={handleCreatePractice}
-            />
-          </div>
+          <Button
+            label="만들기"
+            variant="next"
+            disabled={!isFormValid || isLoading}
+            onClick={handleCreatePractice}
+          />
         </div>
 
         <NewPracticeForm onFormValidChange={setIsFormValid} />

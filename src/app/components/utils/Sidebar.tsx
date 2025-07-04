@@ -41,7 +41,7 @@ const Sidebar: React.FC<SidebarProps> = ({ data }) => {
 
   const toggleSections = () => setShowSections(!showSections);
   const toggleNote = (noteId: number) => {
-    setIsNoteOpen(prev => ({
+    setIsNoteOpen((prev) => ({
       ...prev,
       [noteId]: !prev[noteId],
     }));

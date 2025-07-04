@@ -1,55 +1,73 @@
 'use client';
-import { useEffect, useState } from 'react';
-import Button from '@/app/components/atoms/Button';
-import TextInputSection from '@/app/components/atoms/TextInputSection';
-import { usePracticeContext } from '@/app/context/PracticeContext';
-import { createSTT, summaryNote } from '@/app/api/notes';
+
+import { useEffect, useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
-
+import toast from 'react-hot-toast';
+import Button from '@/app/components/atoms/Button';
+import TextInputSection from '@/app/components/atoms/TextInputSection';
 import Loader, { SmallLoader } from '@/app/components/utils/Loader';
+
+import { createSTT, summaryNote } from '@/app/api/notes';
+import { usePracticeContext } from '@/app/context/PracticeContext';
 
 const ConfirmNotePage = () => {
   const {
     file,
-    setKeywords,
-    setRequirement,
     keywords,
     requirement,
+    setKeywords,
+    setRequirement,
     sttLoading,
     setSttLoading,
   } = usePracticeContext();
-  const [alreadyRun, setAlreadyRun] = useState(false);
-  const [summaryLoading, setSummaryLoading] = useState(false);
 
+  const [summaryLoading, setSummaryLoading] = useState(false);
+  const hasRunRef = useRef(false);
   const { folderId, noteId } = useParams();
   const router = useRouter();
 
   useEffect(() => {
     if (!file || !folderId || !noteId) return;
-
-    let alreadyRun = false;
+    if (hasRunRef.current) return;
 
     const runSTT = async () => {
-      if (alreadyRun) return;
-      alreadyRun = true;
-      setSttLoading(true);
-
-      await createSTT(Number(folderId), Number(noteId), file);
-      setAlreadyRun(false);
-      setSttLoading(false);
+      try {
+        hasRunRef.current = true;
+        setSttLoading(true);
+        await createSTT(Number(folderId), Number(noteId), file);
+      } catch (err) {
+        toast.error('STT 생성 중 오류가 발생했습니다.');
+      } finally {
+        setSttLoading(false);
+      }
     };
 
     runSTT();
   }, [file, folderId, noteId, setSttLoading]);
 
   const handleNoteFinalBtn = async () => {
-    if (summaryLoading || sttLoading) return;
+    if (sttLoading || summaryLoading) return;
 
-    setSummaryLoading(true);
-    await summaryNote(Number(folderId), Number(noteId), keywords, requirement);
-    setSummaryLoading(false);
-    router.push(`/notes/${folderId}/${noteId}/summary`);
+    if (!keywords || !requirement) {
+      toast.error('키워드와 요구사항을 모두 입력해주세요.');
+      return;
+    }
+
+    try {
+      setSummaryLoading(true);
+      await summaryNote(
+        Number(folderId),
+        Number(noteId),
+        keywords,
+        requirement
+      );
+      router.push(`/notes/${folderId}/${noteId}/summary`);
+    } catch (err) {
+      toast.error('요약문 생성 중 오류가 발생했습니다.');
+    } finally {
+      setSummaryLoading(false);
+    }
   };
 
   return (
@@ -62,6 +80,7 @@ const ConfirmNotePage = () => {
           />
         </div>
       )}
+
       <div>
         <div className="flex flex-row items-center p-8 justify-between">
           <div className="flex flex-col justify-center items-center text-center text-white h-full">
@@ -76,15 +95,15 @@ const ConfirmNotePage = () => {
             label="다음"
             variant="next"
             onClick={handleNoteFinalBtn}
-            disabled={sttLoading}
-          ></Button>
+            disabled={sttLoading || summaryLoading}
+          />
         </div>
 
         <div className="flex w-full flex-row justify-start px-2">
           <TextInputSection
             onKeywordChange={setKeywords}
             onRequirementChange={setRequirement}
-          ></TextInputSection>
+          />
           <hr className="border-t-[0.5px] border-black-80 my-4" />
           <div className="flex flex-col items-start font-semibold gap-2 w-2/5 pt-8 px-4 border-l border-black-80">
             <p className="text-white">강의 파일</p>
@@ -98,22 +117,20 @@ const ConfirmNotePage = () => {
               }`}
             >
               <Image
-                src={`/active_folder.svg`}
-                alt={'active_folder'}
+                src="/active_folder.svg"
+                alt="active_folder"
                 width={40}
                 height={40}
               />
               <div className="flex flex-col gap-1 whitespace-nowrap">
                 <div className="text-white flex items-center gap-2">
-                  <div className="flex items-center gap-2">
-                    {file?.name && (
-                      <>
-                        {file.name.slice(0, 15)}
-                        {file.name.length > 15 && '...'}
-                      </>
-                    )}
-                    {sttLoading && <SmallLoader />}
-                  </div>
+                  {file?.name && (
+                    <>
+                      {file.name.slice(0, 15)}
+                      {file.name.length > 15 && '...'}
+                    </>
+                  )}
+                  {sttLoading && <SmallLoader />}
                 </div>
               </div>
             </p>

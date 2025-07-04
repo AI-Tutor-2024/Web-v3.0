@@ -1,23 +1,24 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { fetchNotes, deleteNote, createSTT } from "@/app/api/notes";
-import { getFolders } from "@/app/api/folders";
-import Info from "@/app/components/molecules/Info";
-import NoteList from "@/app/components/organisms/NoteList";
-import Button from "@/app/components/atoms/Button";
-import { NoteData, NoteResponse } from "@/app/types/note";
-import Skeleton from "@/app/components/utils/Skeleton";
-import NewNoteForm from "@/app/components/organisms/NewNoteForm";
-import { usePracticeContext } from "@/app/context/PracticeContext";
-import { createNote } from "@/app/api/notes";
-import { toast } from "react-hot-toast";
+'use client';
+import React, { useEffect, useRef, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { fetchNotes, deleteNote, createSTT } from '@/app/api/notes';
+import { getFolders } from '@/app/api/folders';
+import Info from '@/app/components/molecules/Info';
+import NoteList from '@/app/components/organisms/NoteList';
+import Button from '@/app/components/atoms/Button';
+import { NoteData, NoteResponse } from '@/app/types/note';
+import Skeleton from '@/app/components/utils/Skeleton';
+import NewNoteForm from '@/app/components/organisms/NewNoteForm';
+import { usePracticeContext } from '@/app/context/PracticeContext';
+import { createNote } from '@/app/api/notes';
+import { toast } from 'react-hot-toast';
 
 const NotesPage = () => {
   const router = useRouter();
   const { folderId } = useParams();
 
   const {
+    file,
     setFile,
     setKeywords,
     setRequirement,
@@ -31,12 +32,16 @@ const NotesPage = () => {
   const [notes, setNotes] = useState<NoteData[]>([]);
   const [loading, setLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [noteName, setNoteName] = useState("");
+  const [noteName, setNoteName] = useState('');
+  const isNextBtnDisabled = !noteName || !file;
+  const hasFetched = useRef(false);
 
   useEffect(() => {
+    if (hasFetched.current) return;
     if (folderId) {
       const loadNotes = async () => {
         try {
+          hasFetched.current = true;
           const folders = await getFolders();
           const currentFolder = folders.find(
             (folder: any) => folder.folderId === Number(folderId)
@@ -44,14 +49,12 @@ const NotesPage = () => {
           if (currentFolder) {
             setFolderName(currentFolder.folderName);
             setProfessor(currentFolder.professor);
-          } else {
-            console.error("Folder not found");
           }
 
           const notesData: NoteResponse = await fetchNotes(Number(folderId));
           setNotes(notesData.noteListDetailRes);
         } catch (error) {
-          console.error("Failed to load notes:", error);
+          toast.error('노트를 불러오는데 실패했어요2');
         } finally {
           setLoading(false);
         }
@@ -67,14 +70,14 @@ const NotesPage = () => {
       const notesData: NoteResponse = await fetchNotes(Number(folderId));
       setNotes(notesData.noteListDetailRes);
     } catch (error) {
-      console.error("Failed to delete note:", error);
+      toast.error('노트 삭제하는데데 실패했어요.');
     }
   };
 
   const handleNoteNextBtn = async () => {
     try {
       if (!noteName) {
-        toast.error("노트 이름을 입력해 주세요.");
+        toast.error('노트 이름을 입력해 주세요.');
         return;
       }
 
@@ -82,7 +85,8 @@ const NotesPage = () => {
       const createdNoteResponse = await createNote(Number(folderId), {
         title: noteName,
       });
-      toast.success("노트가 생성되었습니다.");
+
+      toast.success('노트가 생성되었습니다.');
 
       const notesData: NoteResponse = await fetchNotes(Number(folderId));
       const newNote =
@@ -93,11 +97,11 @@ const NotesPage = () => {
           `/notes/${folderId}/${createdNoteResponse.information.noteId}/confirm`
         );
       } else {
-        toast.error("생성된 노트를 찾을 수 없습니다.");
+        toast.error('생성된 노트를 찾을 수 없습니다.');
         setSttLoading(false);
       }
     } catch (error) {
-      toast.error("노트 생성 중 오류가 발생했습니다.");
+      toast.error('노트 생성 중 오류가 발생했습니다.');
       setSttLoading(false);
     }
   };
@@ -137,7 +141,12 @@ const NotesPage = () => {
             </p>
           </div>
           <div>
-            <Button label="다음" variant="next" onClick={handleNoteNextBtn} />
+            <Button
+              label="다음"
+              disabled={isNextBtnDisabled}
+              variant="next"
+              onClick={handleNoteNextBtn}
+            />
           </div>
         </div>
       ) : (
