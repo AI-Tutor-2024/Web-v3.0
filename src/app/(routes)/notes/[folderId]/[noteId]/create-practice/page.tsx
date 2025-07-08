@@ -57,11 +57,6 @@ const CreatePracticePage = () => {
     try {
       setIsLoading(true);
 
-      if (!hasRunSTTRef.current) {
-        hasRunSTTRef.current = true;
-        await createSTT(Number(folderId), Number(noteId), file);
-      }
-
       const createPayload = {
         noteId: Number(noteId),
         createPracticeReq: {
