@@ -7,7 +7,7 @@ import NewPracticeForm from '@/app/components/organisms/NewPracticeForm';
 import Button from '@/app/components/atoms/Button';
 import { createPractice } from '@/app/api/practice/createPractice';
 import Loader from '@/app/components/utils/Loader';
-import { createSTT } from '@/app/api/notes';
+
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
 
