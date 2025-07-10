@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { usePracticeContext } from '@/app/context/PracticeContext';
 import NewPracticeForm from '@/app/components/organisms/NewPracticeForm';
@@ -41,14 +41,8 @@ const CreatePracticePage = () => {
 
   const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const hasRunSTTRef = useRef(false);
 
   const handleCreatePractice = async () => {
-    if (!noteId || !file || file.size === 0) {
-      toast.error('파일이 업로드되지 않았습니다. 파일을 선택해주세요.');
-      return;
-    }
-
     if (!type) {
       toast.error('문제 유형을 최소 하나 선택해야 합니다.');
       return;

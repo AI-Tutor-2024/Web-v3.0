@@ -14,11 +14,8 @@ const Sidebar: React.FC<SidebarProps> = ({ data }) => {
   const { open } = useOnboardingstore();
 
   const pathname = usePathname();
-  const params = useParams();
   const router = useRouter();
 
-  const currentFolderId = params.folderId;
-  const currentNoteId = params.noteId;
   const isHome = pathname === '/home';
 
   type Note = {
@@ -40,11 +37,7 @@ const Sidebar: React.FC<SidebarProps> = ({ data }) => {
   const toggleNote = (folderId: number) => {
     setNoteOpenSet((prev) => {
       const newSet = new Set(prev);
-      if (newSet.has(folderId)) {
-        newSet.delete(folderId);
-      } else {
-        newSet.add(folderId);
-      }
+      newSet.has(folderId) ? newSet.delete(folderId) : newSet.add(folderId);
       return newSet;
     });
   };
