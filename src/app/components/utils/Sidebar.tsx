@@ -13,6 +13,11 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ data }) => {
   const { open } = useOnboardingstore();
 
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const isHome = pathname === '/home';
+
   type Note = {
     noteId: number;
     noteName: string;
@@ -25,26 +30,16 @@ const Sidebar: React.FC<SidebarProps> = ({ data }) => {
     notesInFolderRes: Note[];
   };
 
-  const pathname = usePathname();
-  const params = useParams();
-  const router = useRouter();
+  const folders: Folder[] = data?.folderNoteDetailList || [];
 
-  const currentFolderId = params.folderId;
-  const currentNoteId = params.noteId;
-  const isHome = pathname === '/home';
-  const folders = data?.folderNoteDetailList || [];
+  const [noteOpenSet, setNoteOpenSet] = useState<Set<number>>(new Set());
 
-  const [showSections, setShowSections] = useState(false);
-  const [isNoteOpen, setIsNoteOpen] = useState<{ [noteId: number]: boolean }>(
-    {}
-  );
-
-  const toggleSections = () => setShowSections(!showSections);
-  const toggleNote = (noteId: number) => {
-    setIsNoteOpen((prev) => ({
-      ...prev,
-      [noteId]: !prev[noteId],
-    }));
+  const toggleNote = (folderId: number) => {
+    setNoteOpenSet((prev) => {
+      const newSet = new Set(prev);
+      newSet.has(folderId) ? newSet.delete(folderId) : newSet.add(folderId);
+      return newSet;
+    });
   };
 
   const handleGuideClick = () => {
@@ -52,129 +47,106 @@ const Sidebar: React.FC<SidebarProps> = ({ data }) => {
   };
 
   return (
-    <div className="min-w-[220px] h-screen justify-between flex flex-col z-20 bg-black">
-      <div className="flex flex-col h-full rounded-lg bg-black">
+    <div className="min-w-[220px] max-w-[280px] w-full h-screen flex flex-col justify-between bg-black z-20">
+      <div className="flex flex-col h-full overflow-y-auto pr-1">
         <Link href="/home">
-          <div className="flex items-center justify-center px-2">
+          <div className="flex items-center justify-center py-4">
             <Icon label="icon" className="w-[110px] h-[70px] m-auto" />
           </div>
         </Link>
 
-        <div>
+        <Link href="/home">
           <div
-            className={`${
+            className={`px-8 py-2 flex items-center gap-3 cursor-pointer hover:bg-black-80 transition-colors ${
               isHome ? 'bg-black-90' : ''
-            } cursor-pointer transition-colors duration-200`}
+            }`}
           >
-            <Link href="/home">
-              <div className="px-8 py-2 flex flex-row text-center gap-3">
-                <Icon
-                  label="ic_side_home"
-                  className="w-[20px] h-[20px] my-auto"
-                />
-                <p className="text-white">홈</p>
-              </div>
-            </Link>
+            <Icon label="ic_side_home" className="w-[20px] h-[20px]" />
+            <p className="text-white">홈</p>
+          </div>
+        </Link>
+
+        <div className="mt-2">
+          <div className="px-8 py-2 text-white text-sm font-semibold">
+            강의 과목
           </div>
 
-          <div className="flex flex-col">
-            <div
-              className="px-8 py-2 flex flex-row text-center gap-3 cursor-pointer transition-colors duration-200"
-              onClick={toggleSections}
-            >
-              <Icon
-                label="ic_side_folder"
-                className="w-[20px] h-[20px] m-auto"
-              />
-              <p className="text-white mr-8 flex-shrink-0">강의 과목</p>
-              <Icon
-                label="arrow_sidebar"
-                className={`h-[16px] w-[16px] my-auto invert transition-transform duration-300 ${
-                  showSections ? '-rotate-90' : 'rotate-90'
-                }`}
-              />
-            </div>
+          {folders.map((folder) => {
+            const isOpen = noteOpenSet.has(folder.folderId);
+            const folderPath = `/notes/${folder.folderId}`;
+            const isSelectedFolder = pathname.startsWith(folderPath);
 
-            {showSections &&
-              folders.map((folder: Folder) => {
-                const isSelectedFolder: boolean =
-                  currentFolderId?.toString() === folder.folderId.toString();
-
-                return (
-                  <div key={folder.folderId}>
-                    <div className="px-8 py-2 flex justify-between flex-row text-center gap-3 cursor-pointer">
-                      <div className="flex flex-row gap-3">
-                        <Icon
-                          label="ic_side_folder"
-                          className="w-[20px] h-[20px] my-auto"
-                        />
-                        <p
-                          onClick={() =>
-                            router.push(`/notes/${folder.folderId}`)
-                          }
-                          className="text-base text-white flex-shrink-0"
-                        >
-                          {folder.folderName}
-                        </p>
-                      </div>
-                      {(folder.notesInFolderRes?.length ?? 0) > 0 && (
-                        <Icon
-                          label="arrow_sidebar"
-                          className={`h-[16px] w-[16px] my-auto invert transition-transform duration-300 ${
-                            isNoteOpen[folder.folderId]
-                              ? '-rotate-90'
-                              : 'rotate-90'
-                          }`}
-                          onClick={() => toggleNote(folder.folderId)}
-                        />
-                      )}
-                    </div>
-
-                    {(folder.notesInFolderRes?.length ?? 0) > 0 &&
-                      isNoteOpen[folder.folderId] && (
-                        <div className="space-y-1 bg-black-80">
-                          {folder.notesInFolderRes.map((note: Note) => {
-                            const isSelectedNote: boolean =
-                              currentFolderId?.toString() ===
-                                folder.folderId.toString() &&
-                              currentNoteId?.toString() ===
-                                note.noteId.toString();
-
-                            return (
-                              <Link
-                                key={note.noteId}
-                                href={`/notes/${folder.folderId}/${note.noteId}/summary`}
-                              >
-                                <div
-                                  className={`w-full pl-16 text-base py-2 cursor-pointer bg-black-80 ${
-                                    isSelectedNote
-                                      ? 'bg-black-90 text-white'
-                                      : 'text-white hover:bg-black-90'
-                                  }`}
-                                >
-                                  {note.noteName}
-                                </div>
-                              </Link>
-                            );
-                          })}
-                        </div>
-                      )}
+            return (
+              <div key={folder.folderId} className="flex flex-col">
+                <div
+                  className={`px-8 py-2 flex justify-between items-center cursor-pointer hover:bg-black-80 transition-colors ${
+                    isSelectedFolder
+                      ? 'bg-black-90 border-l-4 border-mju-primary'
+                      : ''
+                  }`}
+                >
+                  <div
+                    className="flex items-center gap-3 w-full"
+                    onClick={() => router.push(folderPath)}
+                  >
+                    <Icon
+                      label="ic_side_folder"
+                      className="w-[20px] h-[20px]"
+                    />
+                    <p className="text-white text-base truncate">
+                      {folder.folderName}
+                    </p>
                   </div>
-                );
-              })}
-          </div>
+
+                  {folder.notesInFolderRes.length > 0 && (
+                    <Icon
+                      label="arrow_sidebar"
+                      className={`w-[16px] h-[16px] invert transition-transform duration-300 ${
+                        isOpen ? '-rotate-90' : 'rotate-90'
+                      }`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleNote(folder.folderId);
+                      }}
+                    />
+                  )}
+                </div>
+
+                {folder.notesInFolderRes.length > 0 && isOpen && (
+                  <div className="bg-black-80">
+                    {folder.notesInFolderRes.map((note) => {
+                      const notePath = `/notes/${folder.folderId}/${note.noteId}/summary`;
+                      const isSelectedNote = pathname === notePath;
+
+                      return (
+                        <Link key={note.noteId} href={notePath}>
+                          <div
+                            className={`pl-16 pr-4 py-2 text-base cursor-pointer truncate ${
+                              isSelectedNote
+                                ? 'bg-black-90 text-white'
+                                : 'text-white hover:bg-black-90'
+                            }`}
+                          >
+                            {note.noteName}
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      <div className="pb-8">
-        <div className="hover:bg-black-80 hover:rounded-md cursor-pointer transition-colors duration-200 rounded-md">
-          <div
-            onClick={handleGuideClick}
-            className="flex flex-row px-[35px] py-2 gap-3"
-          >
-            <Icon label="guide" className="w-[20px] h-[20px] my-auto" />
-            <p className="text-white">가이드보기</p>
-          </div>
+      <div className="pb-8 px-[35px]">
+        <div
+          className="flex gap-3 items-center px-2 py-2 cursor-pointer hover:bg-black-80 rounded-md transition-colors"
+          onClick={handleGuideClick}
+        >
+          <Icon label="guide" className="w-[20px] h-[20px]" />
+          <p className="text-white">가이드 보기</p>
         </div>
       </div>
     </div>
